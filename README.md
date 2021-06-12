@@ -1,2 +1,2 @@
 # LookupDropdown.PCF
-PCF Control that renders a lookup field as a dropdown
+ PCF to render a lookup field as a dropdown
