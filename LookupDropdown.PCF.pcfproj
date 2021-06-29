@@ -9,7 +9,7 @@
   
   <PropertyGroup>
     <Name>LookupDropdown.PCF</Name>
-    <ProjectGuid>f6bb8a11-056a-4b32-b126-3e8908ae2301</ProjectGuid>
+    <ProjectGuid>667eb7fa-f160-4e6d-af19-bc6e7cdbabbe</ProjectGuid>
     <OutputPath>$(MSBuildThisFileDirectory)out\controls</OutputPath>
   </PropertyGroup>
 

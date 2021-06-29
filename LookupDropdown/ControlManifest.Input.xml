@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="DR" constructor="LookupDropdown" version="1.0.0" display-name-key="LookupDropdown" description-key="LookupDropdown description" control-type="standard">
-    
-    <property name="lookupfield" display-name-key="Lookup Field" description-key="Lookup Field to render as dropbox" of-type="Lookup.Simple" usage="input" />
- 
+  <control namespace="DR" constructor="LookupDropdown" version="0.0.2" display-name-key="LookupDropdown" description-key="LookupDropdown description" control-type="standard">
+
+    <property name="lookupfield" display-name-key="Lookup Field" description-key="Lookup field to render as dropdown" of-type="Lookup.Simple" usage="bound" required="true" />
+    <property name="filter" display-name-key="Filter" description-key="(Optional) Odata filter statement (Ex: statuscode eq 1)" of-type="SingleLine.Text" usage="input" />
+
+    <property name="showRecordImage" display-name-key="Show Record Image" description-key="Show the record image beside the text" of-type="Enum" usage="input" required="true">
+      <value name="false" display-name-key="false" description-key="False" default="true">false</value>
+      <value name="true" display-name-key="true" description-key="True">true</value>     
+    </property>
+
     <resources>
       <code path="index.ts" order="1"/>
-      
+      <!-- UNCOMMENT TO ADD MORE RESOURCES
+      <css path="css/LookupDropdown.css" order="1" />
+      <resx path="strings/LookupDropdown.1033.resx" version="1.0.0" />
+      -->
     </resources>
+   
     <feature-usage>
       <uses-feature name="Utility" required="true" />
       <uses-feature name="WebAPI" required="true" />
     </feature-usage>
+ 
   </control>
 </manifest>
