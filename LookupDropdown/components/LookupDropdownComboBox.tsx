@@ -20,7 +20,14 @@ const LookupDropdownComboBox = ():JSX.Element => {
   // - When value of combobox changes, callback to PCF
   const onComboboxChanged = (event: React.FormEvent<IComboBox>, option?:IComboBoxOption|undefined, index? : number | undefined) => {
     // vm.setCountrycode!(option?.key.toString()!)
-    // vm.onChange(option?.key.toString()!,option?.text!);
+    let lookupvalue
+    if (option === undefined) {
+      lookupvalue = undefined
+    } else {
+      lookupvalue = [{ id: option.key.toString(), name: option.text, entityType: pcfcontext.entityname }]
+    }
+
+    pcfcontext.onChange(lookupvalue)
   }
 
   // MAIN RENDERING
@@ -40,8 +47,8 @@ const LookupDropdownComboBox = ():JSX.Element => {
                             componentRef={comboboxRef}
                             // onRenderOption={CountryPickerComboBoxOption}
                             onChange={onComboboxChanged}
-                            // selectedKey={selectedoption?.key}
-                            text='test'
+                            selectedKey={pcfcontext.selectedValue?.id}
+                            text={pcfcontext.selectedValue?.name}
                             allowFreeform={true}
                             autoComplete="on"
                             options={options}

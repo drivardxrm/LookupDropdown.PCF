@@ -5,23 +5,19 @@
 import { IInputs } from '../generated/ManifestTypes'
 
 export interface IPcfContextServiceProps{
+  selectedValue: ComponentFramework.LookupValue | undefined;
   context: ComponentFramework.Context<IInputs>;
-  notifyOutputChanged:() => void;
-	// xrmPage: Xrm.Page;
-}
-
-export interface ILookupOptions{
-  context: ComponentFramework.Context<IInputs>;
-  notifyOutputChanged:() => void;
-	// xrmPage: Xrm.Page;
+  onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
 }
 
 export class PcfContextService {
+  selectedValue?: ComponentFramework.LookupValue | undefined;
   context: ComponentFramework.Context<IInputs>;
   entityname:string;
 	viewid:string;
   isReadOnly = ():boolean => this.context.mode.isControlDisabled || !this.context.parameters.lookupfield.security?.editable;
   isMasked = ():boolean => !this.context.parameters.lookupfield.security?.readable;
+  onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
 
   constructor (props?:IPcfContextServiceProps) {
     if (props) {
@@ -29,14 +25,24 @@ export class PcfContextService {
 
       this.entityname = this.context.parameters.lookupfield.getTargetEntityType()
 	    this.viewid = this.context.parameters.lookupfield.getViewId()
+      this.selectedValue = props.selectedValue
+      this.onChange = props.onChange
     }
   }
 
   async getRecords () : Promise<ComponentFramework.WebApi.Entity[]> {
-    // todo find a way to remove magic strings. LINQ Style would be great
+    const entitymetadata = await this.getEntityMetadata()
+    let selectstatement = `$select=${entitymetadata.PrimaryIdAttribute},${entitymetadata.PrimaryNameAttribute}`
+    if (this.context.parameters.showRecordImage.raw === 'true') {
+      selectstatement += ',entityimage'
+    }
     const result = await this.context.webAPI
-      .retrieveMultipleRecords(this.entityname, `?$select=${this.entityname}id,xrm_name`)
+      .retrieveMultipleRecords(this.entityname, `?${selectstatement}`)
 
     return result?.entities ?? []
+  }
+
+  async getEntityMetadata () : Promise<ComponentFramework.PropertyHelper.EntityMetadata> {
+    return this.context.utils.getEntityMetadata(this.entityname)
   }
 }

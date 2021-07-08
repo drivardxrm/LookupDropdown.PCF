@@ -1,6 +1,4 @@
 /* eslint-disable no-use-before-define */
-/* eslint-disable no-undef */
-import { initializeIcons } from '@fluentui/react/lib/Icons'
 import * as React from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { PcfContextProvider } from '../services/PcfContext'
@@ -11,9 +9,6 @@ import LookupDropdownComboBox from './LookupDropdownComboBox'
 // import { ViewModelProvider } from '../services/ViewModelProvider'
 
 // import LookupDropdownApp from './CountryPickerComboBox'
-// initilize icons
-initializeIcons()
-
 // declare outside of FC element so it doesnt gets evaluated at each rerenders
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +20,7 @@ const queryClient = new QueryClient({
   }
 })
 
+// eslint-disable-next-line no-undef
 const LookupDropdownApp = (props:IPcfContextServiceProps): JSX.Element => {
 // todo create pcfcontext in index
   const pcfcontextservice = new PcfContextService(props)

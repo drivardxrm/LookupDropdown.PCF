@@ -7,11 +7,15 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import LookupDropdownApp from './components/LookupDropdownApp'
 import { IPcfContextServiceProps, PcfContextService } from './services/PcfContextService'
+import { initializeIcons } from '@fluentui/react/lib/Icons'
 // import IViewModel from './services/ViewModel'
+
+initializeIcons(undefined, { disableWarnings: true })
 
 export class LookupDropdown implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 	private _notifyOutputChanged:() => void;
 	private _container: HTMLDivElement;
+	private _selectedValue: ComponentFramework.LookupValue[] | undefined;
 	private _entityType = '';
 	private _defaultViewId = '';
 	private _appprops:IPcfContextServiceProps;
@@ -47,8 +51,9 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	  this._container = document.createElement('div')
 
 	  this._appprops = {
+	    selectedValue: undefined,
 	    context: context,
-	    notifyOutputChanged: notifyOutputChanged
+	    onChange: this.onChange
 	  }
 
 	  this._pcfcontextservice = new PcfContextService(this._appprops)
@@ -65,6 +70,8 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	 */
 	public updateView (context: ComponentFramework.Context<IInputs>): void {
 	  // Add code to update control view
+	  // this._selectedValue = context.parameters.lookupfield.raw[0] ?? undefined
+	  this._appprops.selectedValue = context.parameters.lookupfield.raw[0] ?? undefined
 
 	  // RENDER React Component
 	  ReactDOM.render(
@@ -73,12 +80,19 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	  )
 	}
 
+	onChange = (newValue: ComponentFramework.LookupValue[] | undefined): void => {
+	  this._selectedValue = newValue
+	  this._notifyOutputChanged()
+	};
+
 	/**
 	 * It is called by the framework prior to a control receiving new data.
 	 * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as “bound” or “output”
 	 */
 	public getOutputs (): IOutputs {
-	  return {}
+	  return {
+		  lookupfield: this._selectedValue
+	  }
 	}
 
 	/**
@@ -89,10 +103,4 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	  // Add code to cleanup control if necessary
 	  ReactDOM.unmountComponentAtNode(this._container)
 	}
-
-  // private notifyChange (selectedlookup: LookupValue) {
-  //   // this._selectedCode = selectedCode;
-  //   // this._selectedName = selectedName;
-  //   this._notifyOutputChanged()
-  // }
 }
