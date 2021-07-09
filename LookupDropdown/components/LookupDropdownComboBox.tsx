@@ -8,6 +8,8 @@ import { Stack } from '@fluentui/react/lib/Stack'
 import { VirtualizedComboBox } from '@fluentui/react'
 import { useRecordsOptions } from '../hooks/useRecords'
 import { usePcfContext } from '../services/PcfContext'
+import LookupDropdownOption from './LookupDropdownOption'
+import RecordIcon from './RecordIcon'
 
 // eslint-disable-next-line no-undef
 const LookupDropdownComboBox = ():JSX.Element => {
@@ -42,13 +44,13 @@ const LookupDropdownComboBox = ():JSX.Element => {
             <>
                 {options && (
                     <Stack horizontal>
-
+                        <RecordIcon/>
                         <VirtualizedComboBox
                             componentRef={comboboxRef}
-                            // onRenderOption={CountryPickerComboBoxOption}
+                            onRenderOption={LookupDropdownOption}
                             onChange={onComboboxChanged}
-                            selectedKey={pcfcontext.selectedValue?.id}
-                            text={pcfcontext.selectedValue?.name}
+                            selectedKey={pcfcontext.selectedValue?.id ?? ''}
+                            text={pcfcontext.selectedValue?.name ?? ''}
                             allowFreeform={true}
                             autoComplete="on"
                             options={options}

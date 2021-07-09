@@ -18,6 +18,7 @@ export class PcfContextService {
   isReadOnly = ():boolean => this.context.mode.isControlDisabled || !this.context.parameters.lookupfield.security?.editable;
   isMasked = ():boolean => !this.context.parameters.lookupfield.security?.readable;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
+  showRecordImage = ():boolean => this.context.parameters.showRecordImage.raw === 'true';
 
   constructor (props?:IPcfContextServiceProps) {
     if (props) {
