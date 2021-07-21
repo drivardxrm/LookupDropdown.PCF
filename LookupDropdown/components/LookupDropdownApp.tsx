@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryCache, QueryClient, QueryClientProvider } from 'react-query'
 import { PcfContextProvider } from '../services/PcfContext'
 import { IPcfContextServiceProps, PcfContextService } from '../services/PcfContextService'
 import LookupDropdownComboBox from './LookupDropdownComboBox'
@@ -11,6 +11,7 @@ import LookupDropdownComboBox from './LookupDropdownComboBox'
 // import LookupDropdownApp from './CountryPickerComboBox'
 // declare outside of FC element so it doesnt gets evaluated at each rerenders
 const queryClient = new QueryClient({
+  queryCache: new QueryCache(), // creates a new querycahe for each instance of the control on a page
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false
@@ -26,7 +27,7 @@ const LookupDropdownApp = (props:IPcfContextServiceProps): JSX.Element => {
   const pcfcontextservice = new PcfContextService(props)
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient} contextSharing={false}>
       <PcfContextProvider pcfcontext={pcfcontextservice}>
         <LookupDropdownComboBox/>
       </PcfContextProvider>

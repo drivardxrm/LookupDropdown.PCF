@@ -19,6 +19,7 @@ export class PcfContextService {
   isMasked = ():boolean => !this.context.parameters.lookupfield.security?.readable;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
   showRecordImage = ():boolean => this.context.parameters.showRecordImage.raw === 'true';
+  instanceid:string = '';
 
   constructor (props?:IPcfContextServiceProps) {
     if (props) {
@@ -28,6 +29,7 @@ export class PcfContextService {
 	    this.viewid = this.context.parameters.lookupfield.getViewId()
       this.selectedValue = props.selectedValue
       this.onChange = props.onChange
+      this.instanceid = Date.now().toString()
     }
   }
 
@@ -35,7 +37,7 @@ export class PcfContextService {
     const entitymetadata = await this.getEntityMetadata()
     let selectstatement = `$select=${entitymetadata.PrimaryIdAttribute},${entitymetadata.PrimaryNameAttribute}`
     if (this.context.parameters.showRecordImage.raw === 'true') {
-      selectstatement += ',entityimage'
+      selectstatement += `,${entitymetadata.PrimaryImageAttribute}`
     }
     const result = await this.context.webAPI
       .retrieveMultipleRecords(this.entityname, `?${selectstatement}`)

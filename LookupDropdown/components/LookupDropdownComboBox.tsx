@@ -1,8 +1,8 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react'
 
-import { useRef } from 'react'
 import { IComboBox, IComboBoxOption } from '@fluentui/react/lib/ComboBox'
+import { useRef } from 'react'
 
 import { Stack } from '@fluentui/react/lib/Stack'
 import { VirtualizedComboBox } from '@fluentui/react'
@@ -10,6 +10,10 @@ import { useRecordsOptions } from '../hooks/useRecords'
 import { usePcfContext } from '../services/PcfContext'
 import LookupDropdownOption from './LookupDropdownOption'
 import RecordIcon from './RecordIcon'
+
+export interface ILookupDropdownComboBoxProps{
+  entity: string;
+}
 
 // eslint-disable-next-line no-undef
 const LookupDropdownComboBox = ():JSX.Element => {
