@@ -1,1 +1,1 @@
-pac auth create --url https://drivard-dev.crm.dynamics.com/
+pac auth create --url https://drivdev.crm3.dynamics.com/

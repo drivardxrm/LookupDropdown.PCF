@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import * as React from 'react'
 import { IComboBoxOption } from '@fluentui/react/lib/ComboBox'
 import { ImageIcon } from '@fluentui/react/lib/Icon'

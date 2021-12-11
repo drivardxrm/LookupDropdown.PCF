@@ -1,11 +1,9 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react'
-
-import { IComboBox, IComboBoxOption } from '@fluentui/react/lib/ComboBox'
 import { useRef } from 'react'
 
+import { IComboBox, IComboBoxOption, VirtualizedComboBox } from '@fluentui/react/lib/ComboBox'
 import { Stack } from '@fluentui/react/lib/Stack'
-import { VirtualizedComboBox } from '@fluentui/react'
 import { useRecordsOptions } from '../hooks/useRecords'
 import { usePcfContext } from '../services/PcfContext'
 import LookupDropdownOption from './LookupDropdownOption'

@@ -1,24 +1,27 @@
+/* eslint-disable no-undef */
 import { useQuery } from 'react-query'
 import { usePcfContext } from '../services/PcfContext'
+import { useLookupViewFetchXml } from './useLookupViewFetchXml'
 import { useMetadata } from './useMetadata'
 
-// eslint-disable-next-line no-undef
 export const useRecords = () => {
   const pcfcontext = usePcfContext()
-  const { primaryid } = useMetadata()
-  // eslint-disable-next-line no-undef
-  const { data, isLoading, isError } = useQuery<ComponentFramework.WebApi.Entity[], Error>(
-    ['lookuprecords', pcfcontext.instanceid],
-    () => pcfcontext.getRecords(),
-    {
-      enabled: Boolean(primaryid)
-    })
+  const { primaryname, primaryimage } = useMetadata()
+  const { fetchxml } = useLookupViewFetchXml()
+
+  const { data, isLoading, isError } =
+    useQuery<ComponentFramework.WebApi.Entity[], Error>(
+      ['lookuprecords', pcfcontext.instanceid],
+      () => pcfcontext.getLookupRecords(primaryname, primaryimage, fetchxml!),
+      {
+        enabled: Boolean(primaryname) && Boolean(fetchxml)
+      }
+    )
 
   return { records: data, isLoading, isError }
 }
 
 export const useRecordsOptions = () => {
-  // const pcfcontext = usePcfContext()
   const { records, isLoading, isError } = useRecords()
   const { primaryid, primaryname } = useMetadata()
 

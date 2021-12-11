@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="DR" constructor="LookupDropdown" version="0.0.3" display-name-key="LookupDropdown" description-key="LookupDropdown description" control-type="standard">
+  <control namespace="DR" constructor="LookupDropdown" version="0.0.4" display-name-key="LookupDropdown" description-key="LookupDropdown description" control-type="standard">
 
     <property name="lookupfield" display-name-key="Lookup Field" description-key="Lookup field to render as dropdown" of-type="Lookup.Simple" usage="bound" required="true" />
     <property name="customtext" display-name-key="customtext" description-key="(Optional) customize display text with any text attributes of the record. put attribute names between brackets {}. Ex. {new_firstname} {new_lastname}. Leave blank to show record primaryname" of-type="SingleLine.Text" usage="input" />
-    <property name="filter" display-name-key="Filter" description-key="(Optional) Odata filter statement (Ex: statuscode eq 1)" of-type="SingleLine.Text" usage="input" />
+    <!-- <property name="filter" display-name-key="Filter" description-key="(Optional) Odata filter statement (Ex: statuscode eq 1)" of-type="SingleLine.Text" usage="input" /> -->
 
     <property name="showRecordImage" display-name-key="Show Record Image" description-key="Show the record image beside the text" of-type="Enum" usage="input" required="true">
       <value name="false" display-name-key="false" description-key="False" default="true">false</value>
