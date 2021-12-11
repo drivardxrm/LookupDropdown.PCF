@@ -81,7 +81,6 @@ export class PcfContextService {
     const result = await this.context.webAPI
       .retrieveRecord('savedquery', this.context.parameters.lookupfield.getViewId())
     // eslint-disable-next-line no-debugger
-    debugger
     const parser = new DOMParser()
     const fetchxml = parser.parseFromString(result.fetchxml, 'text/xml')
     return fetchxml
@@ -89,5 +88,14 @@ export class PcfContextService {
 
   async getEntityMetadata () : Promise<ComponentFramework.PropertyHelper.EntityMetadata> {
     return this.context.utils.getEntityMetadata(this.entityname)
+  }
+
+  async openRecord (entityname:string, entityid:string):Promise<ComponentFramework.NavigationApi.OpenFormSuccessResponse> {
+    return this.context.navigation.openForm(
+      {
+        entityName: entityname,
+        entityId: entityid
+      }
+    )
   }
 }

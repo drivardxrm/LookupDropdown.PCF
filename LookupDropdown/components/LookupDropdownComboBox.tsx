@@ -8,6 +8,7 @@ import { useRecordsOptions } from '../hooks/useRecords'
 import { usePcfContext } from '../services/PcfContext'
 import LookupDropdownOption from './LookupDropdownOption'
 import RecordIcon from './RecordIcon'
+import NavigateToIcon from './NavigateToIcon'
 
 export interface ILookupDropdownComboBoxProps{
   entity: string;
@@ -60,6 +61,7 @@ const LookupDropdownComboBox = ():JSX.Element => {
                             disabled={pcfcontext.isReadOnly()}
 
                         />
+                        <NavigateToIcon/>
 
                     </Stack>
                 )}
