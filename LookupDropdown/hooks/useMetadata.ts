@@ -8,7 +8,10 @@ export const useMetadata = () => {
   const { data, isLoading, isError } =
     useQuery<ComponentFramework.PropertyHelper.EntityMetadata, Error>(
       ['metadata', pcfcontext.instanceid],
-      () => pcfcontext.getEntityMetadata()
+      () => pcfcontext.getEntityMetadata(),
+      {
+        staleTime: Infinity
+      }
     )
 
   return {

@@ -7,6 +7,7 @@ import { IInputs } from '../generated/ManifestTypes'
 export interface IPcfContextServiceProps{
   selectedValue: ComponentFramework.LookupValue | undefined;
   context: ComponentFramework.Context<IInputs>;
+  instanceid: string;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
 }
 
@@ -29,7 +30,7 @@ export class PcfContextService {
 	    this.viewid = this.context.parameters.lookupfield.getViewId()
       this.selectedValue = props.selectedValue
       this.onChange = props.onChange
-      this.instanceid = Date.now().toString()
+      this.instanceid = props.instanceid
     }
   }
 
@@ -46,8 +47,7 @@ export class PcfContextService {
   }
 
   async getLookupRecords (primaryname:string, primaryimage:string, fetchxmldoc:Document) : Promise<ComponentFramework.WebApi.Entity[]> {
-    // const entitymetadata = await this.getEntityMetadata()
-    // const fetchXml = await this.getLookupViewFetchXml()
+    console.log('fetching : getLookupRecords (' + this.instanceid + ')')
 
     const entityelement = fetchxmldoc.getElementsByTagName('entity')[0]
 
@@ -78,23 +78,25 @@ export class PcfContextService {
   }
 
   async getLookupViewFetchXml () : Promise<Document> {
+    console.log('fetching : getLookupViewFetchXml (' + this.instanceid + ')')
+
     const result = await this.context.webAPI
       .retrieveRecord('savedquery', this.context.parameters.lookupfield.getViewId())
-    // eslint-disable-next-line no-debugger
     const parser = new DOMParser()
     const fetchxml = parser.parseFromString(result.fetchxml, 'text/xml')
     return fetchxml
   }
 
   async getEntityMetadata () : Promise<ComponentFramework.PropertyHelper.EntityMetadata> {
+    console.log('fetching : getEntityMetadata (' + this.instanceid + ')')
     return this.context.utils.getEntityMetadata(this.entityname)
   }
 
-  async openRecord (entityname:string, entityid:string):Promise<ComponentFramework.NavigationApi.OpenFormSuccessResponse> {
+  async openRecord ():Promise<ComponentFramework.NavigationApi.OpenFormSuccessResponse> {
     return this.context.navigation.openForm(
       {
-        entityName: entityname,
-        entityId: entityid
+        entityName: this.entityname,
+        entityId: this.selectedValue?.id ?? ''
       }
     )
   }

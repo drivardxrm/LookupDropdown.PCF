@@ -7,7 +7,10 @@ export const useLookupViewFetchXml = () => {
   const { data, isLoading, isError } =
     useQuery<Document, Error>(
       ['fetchxml', pcfcontext.instanceid],
-      () => pcfcontext.getLookupViewFetchXml()
+      () => pcfcontext.getLookupViewFetchXml(),
+      {
+        staleTime: Infinity
+      }
     )
 
   return {

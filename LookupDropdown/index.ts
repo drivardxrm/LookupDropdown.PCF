@@ -53,6 +53,7 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	  this._appprops = {
 	    selectedValue: undefined,
 	    context: context,
+	    instanceid: Date.now().toString(),
 	    onChange: this.onChange
 	  }
 

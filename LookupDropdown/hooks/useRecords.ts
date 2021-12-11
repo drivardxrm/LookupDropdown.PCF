@@ -14,7 +14,8 @@ export const useRecords = () => {
       ['lookuprecords', pcfcontext.instanceid],
       () => pcfcontext.getLookupRecords(primaryname, primaryimage, fetchxml!),
       {
-        enabled: Boolean(primaryname) && Boolean(fetchxml)
+        enabled: Boolean(primaryname) && Boolean(fetchxml),
+        staleTime: Infinity
       }
     )
 
