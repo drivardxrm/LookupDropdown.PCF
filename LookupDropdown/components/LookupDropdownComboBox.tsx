@@ -9,6 +9,7 @@ import { usePcfContext } from '../services/PcfContext'
 import LookupDropdownOption from './LookupDropdownOption'
 import RecordIcon from './RecordIcon'
 import NavigateToIcon from './NavigateToIcon'
+import AddRecordIcon from './AddRecordIcon'
 
 export interface ILookupDropdownComboBoxProps{
   entity: string;
@@ -29,7 +30,7 @@ const LookupDropdownComboBox = ():JSX.Element => {
     if (option === undefined) {
       lookupvalue = undefined
     } else {
-      lookupvalue = [{ id: option.key.toString(), name: option.text, entityType: pcfcontext.entityname }]
+      lookupvalue = [{ id: option.key.toString(), name: option.text, entityType: pcfcontext.lookupentityname }]
     }
 
     pcfcontext.onChange(lookupvalue)
@@ -61,7 +62,11 @@ const LookupDropdownComboBox = ():JSX.Element => {
                             disabled={pcfcontext.isReadOnly()}
 
                         />
+                        <AddRecordIcon/>
                         <NavigateToIcon/>
+                        <span
+                          className="crmSymbolFont entity-symbol Contact pa-qn pa-ba pa-co pa-qo ">
+                        </span>
 
                     </Stack>
                 )}

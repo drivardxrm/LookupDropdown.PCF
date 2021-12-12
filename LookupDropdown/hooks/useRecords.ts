@@ -41,7 +41,7 @@ export const useRecordsOptions = () => {
 export const useRecord = (id:string) => {
   const pcfcontext = usePcfContext()
   const { records, isLoading, isError } = useRecords()
-  const record = records?.find(record => record[`${pcfcontext.entityname}id`] === id)
+  const record = records?.find(record => record[`${pcfcontext.lookupentityname}id`] === id)
 
   return { record: record, isLoading, isError }
 }

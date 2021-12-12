@@ -14,36 +14,23 @@ export interface IPcfContextServiceProps{
 export class PcfContextService {
   selectedValue?: ComponentFramework.LookupValue | undefined;
   context: ComponentFramework.Context<IInputs>;
-  entityname:string;
+  lookupentityname:string;
 	viewid:string;
   isReadOnly = ():boolean => this.context.mode.isControlDisabled || !this.context.parameters.lookupfield.security?.editable;
   isMasked = ():boolean => !this.context.parameters.lookupfield.security?.readable;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
   showRecordImage = ():boolean => this.context.parameters.showRecordImage.raw === 'true';
-  instanceid:string = '';
+  instanceid:string;
 
   constructor (props?:IPcfContextServiceProps) {
     if (props) {
       this.context = props.context
-
-      this.entityname = this.context.parameters.lookupfield.getTargetEntityType()
+      this.lookupentityname = this.context.parameters.lookupfield.getTargetEntityType()
 	    this.viewid = this.context.parameters.lookupfield.getViewId()
       this.selectedValue = props.selectedValue
       this.onChange = props.onChange
       this.instanceid = props.instanceid
     }
-  }
-
-  async getRecords () : Promise<ComponentFramework.WebApi.Entity[]> {
-    const entitymetadata = await this.getEntityMetadata()
-    let selectstatement = `$select=${entitymetadata.PrimaryIdAttribute},${entitymetadata.PrimaryNameAttribute}`
-    if (this.context.parameters.showRecordImage.raw === 'true') {
-      selectstatement += `,${entitymetadata.PrimaryImageAttribute}`
-    }
-    const result = await this.context.webAPI
-      .retrieveMultipleRecords(this.entityname, `?${selectstatement}`)
-
-    return result?.entities ?? []
   }
 
   async getLookupRecords (primaryname:string, primaryimage:string, fetchxmldoc:Document) : Promise<ComponentFramework.WebApi.Entity[]> {
@@ -72,7 +59,7 @@ export class PcfContextService {
 
     const fetchxmlstring = new XMLSerializer().serializeToString(fetchxmldoc)
     const result = await this.context.webAPI
-      .retrieveMultipleRecords(this.entityname, `?fetchXml=${fetchxmlstring}`)
+      .retrieveMultipleRecords(this.lookupentityname, `?fetchXml=${fetchxmlstring}`)
 
     return result.entities ?? []
   }
@@ -89,14 +76,28 @@ export class PcfContextService {
 
   async getEntityMetadata () : Promise<ComponentFramework.PropertyHelper.EntityMetadata> {
     console.log('fetching : getEntityMetadata (' + this.instanceid + ')')
-    return this.context.utils.getEntityMetadata(this.entityname)
+    return this.context.utils.getEntityMetadata(this.lookupentityname)
   }
 
   async openRecord ():Promise<ComponentFramework.NavigationApi.OpenFormSuccessResponse> {
     return this.context.navigation.openForm(
       {
-        entityName: this.entityname,
+        entityName: this.lookupentityname,
         entityId: this.selectedValue?.id ?? ''
+      }
+    )
+  }
+
+  async createRecord ():Promise<ComponentFramework.NavigationApi.OpenFormSuccessResponse> {
+    const currentrecord = {
+		  id: (<any> this.context.mode).contextInfo.entityId,
+		  entityType: (<any> this.context.mode).contextInfo.entityTypeName,
+		  name: ''
+	  }
+    return this.context.navigation.openForm(
+      {
+        entityName: this.lookupentityname,
+        createFromEntity: currentrecord
       }
     )
   }

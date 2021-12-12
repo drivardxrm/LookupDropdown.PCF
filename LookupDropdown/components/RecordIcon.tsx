@@ -11,10 +11,9 @@ const RecordIcon = ():JSX.Element => {
   const { imagesrc } = useRecordImage(pcfcontext.selectedValue?.id ?? '')
 
   const iconclass = mergeStyles({
-    fontSize: 31,
-    height: 31,
-    width: 31,
-    marginRight: '5px'
+    fontSize: 30,
+    height: 30,
+    width: 50
   })
 
   return imagesrc !== undefined

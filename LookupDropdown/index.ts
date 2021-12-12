@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-useless-constructor */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
@@ -6,9 +7,8 @@ import { IInputs, IOutputs } from './generated/ManifestTypes'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import LookupDropdownApp from './components/LookupDropdownApp'
-import { IPcfContextServiceProps, PcfContextService } from './services/PcfContextService'
+import { IPcfContextServiceProps } from './services/PcfContextService'
 import { initializeIcons } from '@fluentui/react/lib/Icons'
-// import IViewModel from './services/ViewModel'
 
 initializeIcons(undefined, { disableWarnings: true })
 
@@ -16,18 +16,7 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	private _notifyOutputChanged:() => void;
 	private _container: HTMLDivElement;
 	private _selectedValue: ComponentFramework.LookupValue[] | undefined;
-	private _entityType = '';
-	private _defaultViewId = '';
 	private _appprops:IPcfContextServiceProps;
-	private _pcfcontextservice:PcfContextService;
-
-	// private _viewmodel: IViewModel = {
-
-	// //   masked: false,
-	// //   readonly: false,
-	//   // React component callback
-	//   onChange: this.notifyChange.bind(this)
-	// };
 
 	/**
 	 * Empty constructor.
@@ -46,7 +35,6 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	 */
 	public init (context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void {
 	  // Add control initialization code
-	// Add control initialization code
 	  this._notifyOutputChanged = notifyOutputChanged
 	  this._container = document.createElement('div')
 
@@ -56,13 +44,7 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	    instanceid: Date.now().toString(),
 	    onChange: this.onChange
 	  }
-
-	  this._pcfcontextservice = new PcfContextService(this._appprops)
-
 	  container.appendChild(this._container)
-
-	//   this._entityType = context.parameters.lookupfield.getTargetEntityType()
-	//   this._defaultViewId = context.parameters.lookupfield.getViewId()
 	}
 
 	/**
