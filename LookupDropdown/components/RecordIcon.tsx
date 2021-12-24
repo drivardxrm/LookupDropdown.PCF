@@ -1,7 +1,8 @@
 /* eslint-disable no-use-before-define */
-import { FontIcon, ImageIcon } from '@fluentui/react/lib/Icon'
+import { ImageIcon } from '@fluentui/react/lib/Icon'
 import { mergeStyles } from '@fluentui/react/lib/Styling'
 import * as React from 'react'
+import { useEntityImage } from '../hooks/useEntityImage'
 import { useRecordImage } from '../hooks/useRecords'
 import { usePcfContext } from '../services/PcfContext'
 
@@ -9,6 +10,7 @@ import { usePcfContext } from '../services/PcfContext'
 const RecordIcon = ():JSX.Element => {
   const pcfcontext = usePcfContext()
   const { imagesrc } = useRecordImage(pcfcontext.selectedValue?.id ?? '')
+  const { entityimagesrc } = useEntityImage('account')
 
   const iconclass = mergeStyles({
     fontSize: 30,
@@ -24,6 +26,14 @@ const RecordIcon = ():JSX.Element => {
       height: '100%',
       width: '100%'
     }}/>
-    : <FontIcon iconName="Globe" className={iconclass} />
+    : <ImageIcon
+    className={iconclass}
+    imageProps={{
+      src: entityimagesrc,
+      height: '100%',
+      width: '100%'
+    }}/>
+    // <span className="crmSymbolFont entity-symbol Contact pa-ck pa-ba pa-co pa-rs"></span>
+    // : <FontIcon iconName="Globe" className={iconclass} />
 }
 export default RecordIcon

@@ -2,13 +2,13 @@
 import { useQuery } from 'react-query'
 import { usePcfContext } from '../services/PcfContext'
 
-export const useMetadata = () => {
+export const useMetadata = (entityname:string) => {
   const pcfcontext = usePcfContext()
 
   const { data, isLoading, isError } =
     useQuery<ComponentFramework.PropertyHelper.EntityMetadata, Error>(
-      ['metadata', pcfcontext.instanceid],
-      () => pcfcontext.getEntityMetadata(),
+      ['metadata', entityname, pcfcontext.instanceid],
+      () => pcfcontext.getEntityMetadata(entityname),
       {
         staleTime: Infinity
       }
@@ -18,6 +18,8 @@ export const useMetadata = () => {
     primaryid: data?.PrimaryIdAttribute,
     primaryname: data?.PrimaryNameAttribute,
     primaryimage: data?.PrimaryImageAttribute,
+    objecttypecode: data?.ObjectTypeCode,
+    iconvectorname: data?.IconVectorName,
     isLoading,
     isError
   }

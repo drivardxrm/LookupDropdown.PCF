@@ -2,6 +2,7 @@
     "extends": "./node_modules/pcf-scripts/tsconfig_base.json",
     "compilerOptions": {
         "typeRoots": ["node_modules/@types"],
-        "sourceMap": true
+        "sourceMap": true,
+        "jsx": "react"
     }
 }

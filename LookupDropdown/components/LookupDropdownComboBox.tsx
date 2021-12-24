@@ -9,7 +9,7 @@ import { usePcfContext } from '../services/PcfContext'
 import LookupDropdownOption from './LookupDropdownOption'
 import RecordIcon from './RecordIcon'
 import NavigateToIcon from './NavigateToIcon'
-import AddRecordIcon from './AddRecordIcon'
+// import AddRecordIcon from './AddRecordIcon'
 
 export interface ILookupDropdownComboBoxProps{
   entity: string;
@@ -45,32 +45,28 @@ const LookupDropdownComboBox = ():JSX.Element => {
   //   return <MasquedInput/>
   } else {
     return (
-            <>
-                {options && (
-                    <Stack horizontal>
-                        <RecordIcon/>
-                        <VirtualizedComboBox
-                            componentRef={comboboxRef}
-                            onRenderOption={LookupDropdownOption}
-                            onChange={onComboboxChanged}
-                            selectedKey={pcfcontext.selectedValue?.id ?? ''}
-                            text={pcfcontext.selectedValue?.name ?? ''}
-                            allowFreeform={true}
-                            autoComplete="on"
-                            options={options}
-                            style={{ width: '100%' }}
-                            disabled={pcfcontext.isReadOnly()}
+      <>
+        {options && (
+          <Stack horizontal>
+              <RecordIcon/>
+              <VirtualizedComboBox
+                  componentRef={comboboxRef}
+                  onRenderOption={LookupDropdownOption}
+                  onChange={onComboboxChanged}
+                  selectedKey={pcfcontext.selectedValue?.id ?? ''}
+                  text={pcfcontext.selectedValue?.name ?? ''}
+                  allowFreeform={true}
+                  autoComplete="on"
+                  options={options}
+                  style={{ width: '100%' }}
+                  disabled={pcfcontext.isReadOnly()}
+              />
+              {/* <AddRecordIcon/> */}
+              <NavigateToIcon/>
 
-                        />
-                        <AddRecordIcon/>
-                        <NavigateToIcon/>
-                        <span
-                          className="crmSymbolFont entity-symbol Contact pa-qn pa-ba pa-co pa-qo ">
-                        </span>
-
-                    </Stack>
-                )}
-            </>
+          </Stack>
+        )}
+      </>
     )
   }
 }

@@ -12,3 +12,4 @@
 # msbuild output directories
 /bin
 /obj
+.vscode/settings.json

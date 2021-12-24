@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import { IDropdownOption } from '@fluentui/react'
 import { useQuery } from 'react-query'
 import { usePcfContext } from '../services/PcfContext'
 import { useLookupViewFetchXml } from './useLookupViewFetchXml'
@@ -6,7 +7,7 @@ import { useMetadata } from './useMetadata'
 
 export const useRecords = () => {
   const pcfcontext = usePcfContext()
-  const { primaryname, primaryimage } = useMetadata()
+  const { primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname)
   const { fetchxml } = useLookupViewFetchXml()
 
   const { data, isLoading, isError } =
@@ -23,8 +24,9 @@ export const useRecords = () => {
 }
 
 export const useRecordsOptions = () => {
+  const pcfcontext = usePcfContext()
   const { records, isLoading, isError } = useRecords()
-  const { primaryid, primaryname } = useMetadata()
+  const { primaryid, primaryname } = useMetadata(pcfcontext.lookupentityname)
 
   const options = records
     ? records.map(e => (
@@ -38,6 +40,27 @@ export const useRecordsOptions = () => {
   return { options, isLoading, isError }
 }
 
+export const useDropdownOptions = () => {
+  const pcfcontext = usePcfContext()
+  const { records, isLoading, isError } = useRecords()
+  const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname)
+
+  const options:IDropdownOption[] = records
+    ? [{ key: -1, text: '--Select--' }].concat(records.map(e => {
+        const imagesrc = e?.[primaryimage] == null
+          ? undefined
+          : `data:image/jpeg;base64,${e?.[primaryimage]}`
+        return {
+          key: e[`${primaryid}`],
+          text: e[`${primaryname}`],
+          data: { imagesrc: imagesrc }
+        }
+      }))
+    : [{ key: -1, text: '---Select---' }]
+
+  return { options, isLoading, isError }
+}
+
 export const useRecord = (id:string) => {
   const pcfcontext = usePcfContext()
   const { records, isLoading, isError } = useRecords()
@@ -47,8 +70,9 @@ export const useRecord = (id:string) => {
 }
 
 export const useRecordImage = (id:string) => {
+  const pcfcontext = usePcfContext()
   const { record, isLoading, isError } = useRecord(id)
-  const { primaryimage } = useMetadata()
+  const { primaryimage } = useMetadata(pcfcontext.lookupentityname)
 
   const rawImage = record?.[primaryimage]
   if (rawImage == null) {

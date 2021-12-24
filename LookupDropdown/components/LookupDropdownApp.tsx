@@ -3,8 +3,10 @@ import * as React from 'react'
 import { QueryCache, QueryClient, QueryClientProvider } from 'react-query'
 import { PcfContextProvider } from '../services/PcfContext'
 import { IPcfContextServiceProps, PcfContextService } from '../services/PcfContextService'
-import LookupDropdownComboBox from './LookupDropdownComboBox'
+// import LookupDropdownComboBox from './LookupDropdownComboBox'
 import { ReactQueryDevtools } from 'react-query/devtools'
+// import { LookupDropdown } from '..'
+import LookupDropdown from './LookupDropdown'
 
 // import IViewModel from '../services/ViewModel'
 // import { ViewModelProvider } from '../services/ViewModelProvider'
@@ -31,7 +33,8 @@ const LookupDropdownApp = (props:IPcfContextServiceProps): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient} contextSharing={false}>
       <PcfContextProvider pcfcontext={pcfcontextservice}>
-        <LookupDropdownComboBox/>
+        {/* <LookupDropdownComboBox/> */}
+        <LookupDropdown/>
       </PcfContextProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

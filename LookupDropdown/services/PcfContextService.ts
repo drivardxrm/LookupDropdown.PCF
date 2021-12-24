@@ -74,8 +74,8 @@ export class PcfContextService {
     return fetchxml
   }
 
-  async getEntityMetadata () : Promise<ComponentFramework.PropertyHelper.EntityMetadata> {
-    console.log('fetching : getEntityMetadata (' + this.instanceid + ')')
+  async getEntityMetadata (entityname:string) : Promise<ComponentFramework.PropertyHelper.EntityMetadata> {
+    console.log(`fetching : getEntityMetadata ${entityname}(${this.instanceid})`)
     return this.context.utils.getEntityMetadata(this.lookupentityname)
   }
 
@@ -86,6 +86,10 @@ export class PcfContextService {
         entityId: this.selectedValue?.id ?? ''
       }
     )
+  }
+
+  async getEntityImage (entityname:string) : Promise<string> {
+    return '/_imgs/svg_2.svg'
   }
 
   async createRecord ():Promise<ComponentFramework.NavigationApi.OpenFormSuccessResponse> {
