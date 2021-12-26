@@ -8,7 +8,7 @@ import { Dropdown, IDropdownOption, IDropdown } from '@fluentui/react/lib/Dropdo
 import { ImageIcon } from '@fluentui/react/lib/Icon'
 import { useRecordsAsOptions } from '../hooks/useRecords'
 import { dropdownIconOptionstyle, dropdownIcontitlestyle, dropdownStyles, dropdownTextstyle, dropdownTheme } from '../styles/DropdownStyles'
-
+import MasquedInput from './MaskedInput'
 export interface ILookupDropdownProps{
   entity: string;
 }
@@ -81,8 +81,8 @@ const LookupDropdown = ():JSX.Element => {
     return <div>Loading...</div>
   } if (isError) {
     return <div>Error fetching data...</div>
-  // } if (vm.masked) {
-  //   return <MasquedInput/>
+  } if (pcfcontext.isMasked()) {
+    return <MasquedInput/>
   } else {
     return (
       <>
