@@ -1,9 +1,7 @@
 /* eslint-disable no-use-before-define */
-// import * as React from 'react'
 import { useContext } from 'react'
 import React = require('react')
 import { PcfContextService } from './PcfContextService'
-// import { PcfContextService } from './PcfContextService'
 
 interface PcfContextProviderProps {
    pcfcontext:PcfContextService,

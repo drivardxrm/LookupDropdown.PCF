@@ -53,7 +53,6 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	 */
 	public updateView (context: ComponentFramework.Context<IInputs>): void {
 	  // Add code to update control view
-	  // this._selectedValue = context.parameters.lookupfield.raw[0] ?? undefined
 	  this._appprops.selectedValue = context.parameters.lookupfield.raw[0] ?? undefined
 
 	  // RENDER React Component

@@ -4,18 +4,19 @@ import { IIconProps } from '@fluentui/react/lib/Icon'
 import * as React from 'react'
 import { usePcfContext } from '../services/PcfContext'
 
-const addrecordicon: IIconProps = { iconName: 'Add' }
+const openbuttonicon: IIconProps = { iconName: 'OpenInNewWindow' }
 // eslint-disable-next-line no-undef
-const AddRecordIcon = ():JSX.Element => {
+const OpenRecordButton = ():JSX.Element => {
   const pcfcontext = usePcfContext()
 
   return <IconButton
-            iconProps={addrecordicon}
-            title="Create New Record"
-            ariaLabel="Create New Record"
+            iconProps={openbuttonicon}
+            title="Open record"
+            ariaLabel="Open record"
+            disabled={pcfcontext.selectedValue === undefined}
             onClick={() => {
-              pcfcontext.createRecord()
+              pcfcontext.openRecord()
             }}
           />
 }
-export default AddRecordIcon
+export default OpenRecordButton

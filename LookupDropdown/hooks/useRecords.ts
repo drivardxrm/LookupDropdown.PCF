@@ -23,24 +23,7 @@ export const useRecords = () => {
   return { records: data, isLoading, isError }
 }
 
-export const useRecordsOptions = () => {
-  const pcfcontext = usePcfContext()
-  const { records, isLoading, isError } = useRecords()
-  const { primaryid, primaryname } = useMetadata(pcfcontext.lookupentityname)
-
-  const options = records
-    ? records.map(e => (
-      {
-        key: e[`${primaryid}`],
-        text: e[`${primaryname}`]
-      }
-    ))
-    : undefined
-
-  return { options, isLoading, isError }
-}
-
-export const useDropdownOptions = () => {
+export const useRecordsAsOptions = () => {
   const pcfcontext = usePcfContext()
   const { records, isLoading, isError } = useRecords()
   const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname)
@@ -52,7 +35,7 @@ export const useDropdownOptions = () => {
           : `data:image/jpeg;base64,${e?.[primaryimage]}`
         return {
           key: e[`${primaryid}`],
-          text: e[`${primaryname}`],
+          text: pcfcontext.getRecordText(e, primaryname),
           data: { imagesrc: imagesrc }
         }
       }))

@@ -1,7 +1,7 @@
 import { createTheme } from '@fluentui/react/lib/index'
 import { IDropdownStyles, IDropdownStyleProps } from '@fluentui/react/lib/Dropdown'
 
-export const myTheme = createTheme({
+export const dropdownTheme = createTheme({
   palette: {
     themePrimary: '#a9a9a9',
     themeLighterAlt: '#fcfcfc',
@@ -95,3 +95,7 @@ export const dropdownStyles = (props: IDropdownStyleProps):Partial<IDropdownStyl
     paddingLeft: '7px'
   }]
 })
+
+export const dropdownIconOptionstyle = { marginRight: '8px', width: 25, height: 25 }
+export const dropdownIcontitlestyle = { marginRight: '8px', marginTop: '3px', width: 25, height: 25 }
+export const dropdownTextstyle = { display: 'inline-flex' }

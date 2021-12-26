@@ -18,8 +18,6 @@ export const useMetadata = (entityname:string) => {
     primaryid: data?.PrimaryIdAttribute,
     primaryname: data?.PrimaryNameAttribute,
     primaryimage: data?.PrimaryImageAttribute,
-    objecttypecode: data?.ObjectTypeCode,
-    iconvectorname: data?.IconVectorName,
     isLoading,
     isError
   }

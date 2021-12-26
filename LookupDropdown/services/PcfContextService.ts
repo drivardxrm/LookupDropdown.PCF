@@ -33,8 +33,32 @@ export class PcfContextService {
     }
   }
 
+  CustomTextAttributes ():string[] {
+    // eslint-disable-next-line no-useless-escape
+    return this.context.parameters.customtext.raw?.match(/[^{\}]+(?=})/g) ?? []
+  }
+
+  replaceAll (string:string, search:string, replace:string) {
+    return string.split(search).join(replace)
+  }
+
+  getRecordText (record:ComponentFramework.WebApi.Entity, primaryname:string):string {
+    // Default = record primaryname
+    if (this.context.parameters.customtext.raw == null) {
+      return record[`${primaryname}`]
+    } else {
+      // Custom text
+      let customtext = this.context.parameters.customtext.raw
+      this.CustomTextAttributes().forEach(attribute => {
+        customtext = this.replaceAll(customtext, `{${attribute}}`, record[`${attribute}`] ?? '')
+      })
+
+      return customtext
+    }
+  }
+
   async getLookupRecords (primaryname:string, primaryimage:string, fetchxmldoc:Document) : Promise<ComponentFramework.WebApi.Entity[]> {
-    console.log('fetching : getLookupRecords (' + this.instanceid + ')')
+    // console.log('fetching : getLookupRecords (' + this.instanceid + ')')
 
     const entityelement = fetchxmldoc.getElementsByTagName('entity')[0]
 
@@ -47,6 +71,14 @@ export class PcfContextService {
     primarynameattribute.setAttribute('name', primaryname)
     entityelement.appendChild(primarynameattribute)
 
+    // add custom text attributes if needed
+    this.CustomTextAttributes().forEach(attribute => {
+      const customattribute = fetchxmldoc.createElement('attribute')
+      customattribute.setAttribute('name', attribute)
+
+      entityelement.appendChild(customattribute)
+    })
+
     // add image attribute to fetchxml
     if (this.context.parameters.showRecordImage.raw === 'true') {
       const imageattribute = fetchxmldoc.createElement('attribute')
@@ -54,8 +86,6 @@ export class PcfContextService {
 
       entityelement.appendChild(imageattribute)
     }
-
-    // todo delete order node and recreate, order alphabetically (primary name)
 
     const fetchxmlstring = new XMLSerializer().serializeToString(fetchxmldoc)
     const result = await this.context.webAPI
@@ -65,7 +95,7 @@ export class PcfContextService {
   }
 
   async getLookupViewFetchXml () : Promise<Document> {
-    console.log('fetching : getLookupViewFetchXml (' + this.instanceid + ')')
+    // console.log('fetching : getLookupViewFetchXml (' + this.instanceid + ')')
 
     const result = await this.context.webAPI
       .retrieveRecord('savedquery', this.context.parameters.lookupfield.getViewId())
@@ -75,7 +105,7 @@ export class PcfContextService {
   }
 
   async getEntityMetadata (entityname:string) : Promise<ComponentFramework.PropertyHelper.EntityMetadata> {
-    console.log(`fetching : getEntityMetadata ${entityname}(${this.instanceid})`)
+    // console.log(`fetching : getEntityMetadata ${entityname}(${this.instanceid})`)
     return this.context.utils.getEntityMetadata(this.lookupentityname)
   }
 
@@ -84,24 +114,6 @@ export class PcfContextService {
       {
         entityName: this.lookupentityname,
         entityId: this.selectedValue?.id ?? ''
-      }
-    )
-  }
-
-  async getEntityImage (entityname:string) : Promise<string> {
-    return '/_imgs/svg_2.svg'
-  }
-
-  async createRecord ():Promise<ComponentFramework.NavigationApi.OpenFormSuccessResponse> {
-    const currentrecord = {
-		  id: (<any> this.context.mode).contextInfo.entityId,
-		  entityType: (<any> this.context.mode).contextInfo.entityTypeName,
-		  name: ''
-	  }
-    return this.context.navigation.openForm(
-      {
-        entityName: this.lookupentityname,
-        createFromEntity: currentrecord
       }
     )
   }
