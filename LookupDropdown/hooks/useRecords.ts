@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { IDropdownOption } from '@fluentui/react'
+import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
 import { useQuery } from 'react-query'
 import { usePcfContext } from '../services/PcfContext'
 import { useLookupViewFetchXml } from './useLookupViewFetchXml'
@@ -29,17 +29,20 @@ export const useRecordsAsOptions = () => {
   const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname)
 
   const options:IDropdownOption[] = records
-    ? [{ key: -1, text: '--Select--' }].concat(records.map(e => {
+    ? [{ key: -1, text: pcfcontext.SelectText() }].concat(records.map(e => {
         const imagesrc = e?.[primaryimage] == null
           ? undefined
           : `data:image/jpeg;base64,${e?.[primaryimage]}`
         return {
           key: e[`${primaryid}`],
           text: pcfcontext.getRecordText(e, primaryname),
-          data: { imagesrc: imagesrc }
+          data: {
+            imagesrc: imagesrc,
+            recordname: e[`${primaryname}`]
+          }
         }
       }))
-    : [{ key: -1, text: '---Select---' }]
+    : [{ key: -1, text: pcfcontext.SelectText() }]
 
   return { options, isLoading, isError }
 }

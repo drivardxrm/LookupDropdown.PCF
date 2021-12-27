@@ -8,7 +8,6 @@ import { Dropdown, IDropdownOption, IDropdown } from '@fluentui/react/lib/Dropdo
 import { ImageIcon } from '@fluentui/react/lib/Icon'
 import { useRecordsAsOptions } from '../hooks/useRecords'
 import { dropdownIconOptionstyle, dropdownIcontitlestyle, dropdownStyles, dropdownTextstyle, dropdownTheme } from '../styles/DropdownStyles'
-import MasquedInput from './MaskedInput'
 export interface ILookupDropdownProps{
   entity: string;
 }
@@ -27,7 +26,11 @@ const LookupDropdown = ():JSX.Element => {
     if (option === undefined || option.key === -1) {
       lookupvalue = undefined
     } else {
-      lookupvalue = [{ id: option.key.toString(), name: option.text, entityType: pcfcontext.lookupentityname }]
+      lookupvalue = [{
+        id: option.key.toString(),
+        name: option.data.recordname,
+        entityType: pcfcontext.lookupentityname
+      }]
     }
 
     pcfcontext.onChange(lookupvalue)
@@ -81,8 +84,6 @@ const LookupDropdown = ():JSX.Element => {
     return <div>Loading...</div>
   } if (isError) {
     return <div>Error fetching data...</div>
-  } if (pcfcontext.isMasked()) {
-    return <MasquedInput/>
   } else {
     return (
       <>

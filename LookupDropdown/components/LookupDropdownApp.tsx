@@ -4,11 +4,8 @@ import { QueryCache, QueryClient, QueryClientProvider } from 'react-query'
 import { PcfContextProvider } from '../services/PcfContext'
 import { IPcfContextServiceProps, PcfContextService } from '../services/PcfContextService'
 import LookupDropdown from './LookupDropdown'
+import MaskedInput from './MaskedInput'
 
-// import IViewModel from '../services/ViewModel'
-// import { ViewModelProvider } from '../services/ViewModelProvider'
-
-// import LookupDropdownApp from './CountryPickerComboBox'
 // declare outside of FC element so it doesnt gets evaluated at each rerenders
 const queryClient = new QueryClient({
   queryCache: new QueryCache(), // creates a new querycahe for each instance of the control on a page
@@ -29,7 +26,10 @@ const LookupDropdownApp = (props:IPcfContextServiceProps): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient} contextSharing={false}>
       <PcfContextProvider pcfcontext={pcfcontextservice}>
-        <LookupDropdown/>
+      { pcfcontextservice.isMasked()
+        ? <MaskedInput/>
+        : <LookupDropdown />
+      }
       </PcfContextProvider>
     </QueryClientProvider>
   )

@@ -33,9 +33,14 @@ export class PcfContextService {
     }
   }
 
+  // Returns all strings between curly braces in custom text
   CustomTextAttributes ():string[] {
     // eslint-disable-next-line no-useless-escape
     return this.context.parameters.customtext.raw?.match(/[^{\}]+(?=})/g) ?? []
+  }
+
+  SelectText ():string {
+    return `--${this.context.parameters.customselecttext.raw ?? 'Select'}--`
   }
 
   replaceAll (string:string, search:string, replace:string) {
@@ -57,35 +62,40 @@ export class PcfContextService {
     }
   }
 
+  // Get the list of fields to fetch
+  getAttributes (primaryname:string, primaryimage:string):string[] {
+    const attributes:string[] = [primaryname] // primaryname is always fetched
+
+    // add custom text attributes if needed
+    this.CustomTextAttributes().forEach(attribute => {
+      if (!attributes.includes(attribute)) {
+        attributes.push(attribute)
+      }
+    })
+
+    // add primaryimage if needed
+    if (this.context.parameters.showRecordImage.raw === 'true') {
+      attributes.push(primaryimage)
+    }
+    return attributes
+  }
+
   async getLookupRecords (primaryname:string, primaryimage:string, fetchxmldoc:Document) : Promise<ComponentFramework.WebApi.Entity[]> {
     // console.log('fetching : getLookupRecords (' + this.instanceid + ')')
 
+    // Manipulate fetch xml to include only the fields we need
     const entityelement = fetchxmldoc.getElementsByTagName('entity')[0]
 
     // remove existing attributes from view fetchxml
     fetchxmldoc.querySelectorAll('attribute').forEach(el => el.remove())
 
-    // add primary name attribute
-    const primarynameattribute = fetchxmldoc.createElement('attribute')
-
-    primarynameattribute.setAttribute('name', primaryname)
-    entityelement.appendChild(primarynameattribute)
-
-    // add custom text attributes if needed
-    this.CustomTextAttributes().forEach(attribute => {
+    // add attributes to fetchxml
+    this.getAttributes(primaryname, primaryimage).forEach(attribute => {
       const customattribute = fetchxmldoc.createElement('attribute')
       customattribute.setAttribute('name', attribute)
 
       entityelement.appendChild(customattribute)
     })
-
-    // add image attribute to fetchxml
-    if (this.context.parameters.showRecordImage.raw === 'true') {
-      const imageattribute = fetchxmldoc.createElement('attribute')
-      imageattribute.setAttribute('name', primaryimage)
-
-      entityelement.appendChild(imageattribute)
-    }
 
     const fetchxmlstring = new XMLSerializer().serializeToString(fetchxmldoc)
     const result = await this.context.webAPI
