@@ -1,1 +1,0 @@
-pac auth create --url https://drivdev.crm3.dynamics.com/

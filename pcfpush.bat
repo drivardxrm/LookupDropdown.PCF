@@ -1,1 +1,0 @@
-pac pcf push --publisher-prefix driv
