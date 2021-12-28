@@ -5,11 +5,22 @@
 
 #### Features:
 
-* Will honour the default view that is set on the field to fetch the dropdown records.
+* Will honour the **default view** filtering and ordering that is set in the field properties of the form.
 
-* Can include the record images.
+![image](https://user-images.githubusercontent.com/38399134/147574119-8022ced0-ef53-42b5-806b-dadbdc7cc7e8.png)
 
-* Ability to customize the records display text with record text fields other than the primary name attribute.
+
+* Show the record **'Primary Image'** field.
+
+* **Customize** the records display text with text fields other than the 'Primary Name' field.
+
+![image](https://user-images.githubusercontent.com/38399134/147574893-f2f5b658-6400-4e58-a854-7160428fe8dd.png)
+
+
+![image](https://user-images.githubusercontent.com/38399134/147574921-388d1e41-3873-4a03-aa8d-9e64a103621f.png)
+
+
+
 
 # Dependencies
 FluentUI : https://github.com/microsoft/fluentui
@@ -24,6 +35,11 @@ react-query : https://react-query.tanstack.com/
 | customselecttext    | OPTIONAL: Custom text for dropdown selector text (default = Select)    | |
 | showRecordImage   | Show the record image beside the text | false  |
 | showOpenRecordButton | Show a button next to the dropdown to open the selected record form.|  false    |
+
+# Screenshots
+
+![lookupdropdown](https://user-images.githubusercontent.com/38399134/147582453-e507d7ab-d83d-476e-96af-d48a85d495c1.gif)
+
 
 # Installation
 You can install the component directly from solution files contained in the 'Release' section
