@@ -36,6 +36,11 @@ react-query : https://react-query.tanstack.com/
 | showRecordImage   | Show the record image beside the text | false  |
 | showOpenRecordButton | Show a button next to the dropdown to open the selected record form.|  false    |
 
+# Screenshots
+
+![lookupdropdown](https://user-images.githubusercontent.com/38399134/147582453-e507d7ab-d83d-476e-96af-d48a85d495c1.gif)
+
+
 # Installation
 You can install the component directly from solution files contained in the 'Release' section
 https://github.com/drivardxrm/LookupDropdown.PCF/releases/latest
