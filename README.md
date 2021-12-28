@@ -5,17 +5,20 @@
 
 #### Features:
 
-* Will honour the default view filtering and ordering that is set in the field properties of the form.
+* Will honour the **default view** filtering and ordering that is set in the field properties of the form.
+
 ![image](https://user-images.githubusercontent.com/38399134/147574119-8022ced0-ef53-42b5-806b-dadbdc7cc7e8.png)
 
 
-* Show the record 'Primary Image' field.
+* Show the record **'Primary Image'** field.
 
-* Customize the records display text with text fields other than the 'Primary Name' field.
+* **Customize** the records display text with text fields other than the 'Primary Name' field.
 
-![image](https://user-images.githubusercontent.com/38399134/147574639-15797398-1d53-44a5-a998-6e34acf2afd3.png)
+![image](https://user-images.githubusercontent.com/38399134/147574893-f2f5b658-6400-4e58-a854-7160428fe8dd.png)
 
-![image](https://user-images.githubusercontent.com/38399134/147574666-236c4c7e-d813-4e6f-96af-026e7d6d4c13.png)
+
+![image](https://user-images.githubusercontent.com/38399134/147574921-388d1e41-3873-4a03-aa8d-9e64a103621f.png)
+
 
 
 
