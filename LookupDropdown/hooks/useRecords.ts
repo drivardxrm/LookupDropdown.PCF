@@ -46,24 +46,3 @@ export const useRecordsAsOptions = () => {
 
   return { options, isLoading, isError }
 }
-
-export const useRecord = (id:string) => {
-  const pcfcontext = usePcfContext()
-  const { records, isLoading, isError } = useRecords()
-  const record = records?.find(record => record[`${pcfcontext.lookupentityname}id`] === id)
-
-  return { record: record, isLoading, isError }
-}
-
-export const useRecordImage = (id:string) => {
-  const pcfcontext = usePcfContext()
-  const { record, isLoading, isError } = useRecord(id)
-  const { primaryimage } = useMetadata(pcfcontext.lookupentityname)
-
-  const rawImage = record?.[primaryimage]
-  if (rawImage == null) {
-    return { imagesrc: undefined, isLoading, isError }
-  } else {
-    return { imagesrc: `data:image/jpeg;base64,${rawImage}`, isLoading, isError }
-  }
-}

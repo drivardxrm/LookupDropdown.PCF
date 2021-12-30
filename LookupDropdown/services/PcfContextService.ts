@@ -81,8 +81,6 @@ export class PcfContextService {
   }
 
   async getLookupRecords (primaryname:string, primaryimage:string, fetchxmldoc:Document) : Promise<ComponentFramework.WebApi.Entity[]> {
-    // console.log('fetching : getLookupRecords (' + this.instanceid + ')')
-
     // Manipulate fetch xml to include only the fields we need
     const entityelement = fetchxmldoc.getElementsByTagName('entity')[0]
 
@@ -105,8 +103,6 @@ export class PcfContextService {
   }
 
   async getLookupViewFetchXml () : Promise<Document> {
-    // console.log('fetching : getLookupViewFetchXml (' + this.instanceid + ')')
-
     const result = await this.context.webAPI
       .retrieveRecord('savedquery', this.context.parameters.lookupfield.getViewId())
     const parser = new DOMParser()
@@ -115,8 +111,7 @@ export class PcfContextService {
   }
 
   async getEntityMetadata (entityname:string) : Promise<ComponentFramework.PropertyHelper.EntityMetadata> {
-    // console.log(`fetching : getEntityMetadata ${entityname}(${this.instanceid})`)
-    return this.context.utils.getEntityMetadata(this.lookupentityname)
+    return this.context.utils.getEntityMetadata(entityname)
   }
 
   async openRecord ():Promise<ComponentFramework.NavigationApi.OpenFormSuccessResponse> {
