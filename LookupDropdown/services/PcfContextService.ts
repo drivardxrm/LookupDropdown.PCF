@@ -63,8 +63,8 @@ export class PcfContextService {
   }
 
   // Get the list of fields to fetch
-  getAttributes (primaryname:string, primaryimage:string):string[] {
-    const attributes:string[] = [primaryname] // primaryname is always fetched
+  getAttributes (primaryid:string, primaryname:string, primaryimage:string):string[] {
+    const attributes:string[] = [primaryid, primaryname] // primaryid and primaryname is always fetched
 
     // add custom text attributes if needed
     this.CustomTextAttributes().forEach(attribute => {
@@ -80,7 +80,7 @@ export class PcfContextService {
     return attributes
   }
 
-  async getLookupRecords (primaryname:string, primaryimage:string, fetchxmldoc:Document) : Promise<ComponentFramework.WebApi.Entity[]> {
+  async getLookupRecords (primaryid:string, primaryname:string, primaryimage:string, fetchxmldoc:Document) : Promise<ComponentFramework.WebApi.Entity[]> {
     // Manipulate fetch xml to include only the fields we need
     const entityelement = fetchxmldoc.getElementsByTagName('entity')[0]
 
@@ -88,7 +88,7 @@ export class PcfContextService {
     fetchxmldoc.querySelectorAll('attribute').forEach(el => el.remove())
 
     // add attributes to fetchxml
-    this.getAttributes(primaryname, primaryimage).forEach(attribute => {
+    this.getAttributes(primaryid, primaryname, primaryimage).forEach(attribute => {
       const customattribute = fetchxmldoc.createElement('attribute')
       customattribute.setAttribute('name', attribute)
 

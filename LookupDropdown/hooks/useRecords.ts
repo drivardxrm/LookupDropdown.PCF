@@ -7,13 +7,13 @@ import { useMetadata } from './useMetadata'
 
 export const useRecords = () => {
   const pcfcontext = usePcfContext()
-  const { primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname)
+  const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname)
   const { fetchxml } = useLookupViewFetchXml()
 
   const { data, isLoading, isError } =
     useQuery<ComponentFramework.WebApi.Entity[], Error>(
       ['lookuprecords', pcfcontext.instanceid],
-      () => pcfcontext.getLookupRecords(primaryname, primaryimage, fetchxml!),
+      () => pcfcontext.getLookupRecords(primaryid, primaryname, primaryimage, fetchxml!),
       {
         enabled: Boolean(primaryname) && Boolean(fetchxml),
         staleTime: Infinity
