@@ -1,6 +1,8 @@
 # LookupDropdown.PCF
  PowerApps Component framework (PCF) Control that renders a lookup field as a dropdown
  
+ * **UPDATE 2022-01-20 : PLEASE USE v1.0.0.2 or above, a 🐛 was found in earlier versions**
+ 
  * Blog post : https://itmustbecode.com/better-ux-with-a-lookup-dropdown-pcf-control/
  * Download latest version here : https://github.com/drivardxrm/LookupDropdown.PCF/releases/latest
 
