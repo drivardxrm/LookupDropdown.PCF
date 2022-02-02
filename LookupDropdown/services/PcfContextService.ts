@@ -6,6 +6,7 @@ import { IInputs } from '../generated/ManifestTypes'
 
 export interface IPcfContextServiceProps{
   selectedValue: ComponentFramework.LookupValue | undefined;
+  dependantValue: ComponentFramework.LookupValue | undefined;
   context: ComponentFramework.Context<IInputs>;
   instanceid: string;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
@@ -13,21 +14,31 @@ export interface IPcfContextServiceProps{
 
 export class PcfContextService {
   selectedValue?: ComponentFramework.LookupValue | undefined;
+  dependantValue?: ComponentFramework.LookupValue | undefined;
   context: ComponentFramework.Context<IInputs>;
-  lookupentityname:string;
-	viewid:string;
+
+  lookupentityname = ():string => this.context.parameters.lookupfield.getTargetEntityType();
+	viewid = ():string => this.context.parameters.lookupfield.getViewId()
   isReadOnly = ():boolean => this.context.mode.isControlDisabled || !this.context.parameters.lookupfield.security?.editable;
   isMasked = ():boolean => !this.context.parameters.lookupfield.security?.readable;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
   showRecordImage = ():boolean => this.context.parameters.showRecordImage.raw === 'true';
   instanceid:string;
+  // Dependant lookup
+  dependantEntityName = ():string => (this.context.parameters.lookupfield as any).dependentAttributeType ?? ''
+  dependantAttribute = ():string => {
+    const dependantAttribute = (this.context.parameters.lookupfield as any).dependentAttributeName ?? ''
+    const splitted = dependantAttribute.split('.')
+    return splitted[splitted.length - 1]
+  }
 
   constructor (props?:IPcfContextServiceProps) {
     if (props) {
       this.context = props.context
-      this.lookupentityname = this.context.parameters.lookupfield.getTargetEntityType()
-	    this.viewid = this.context.parameters.lookupfield.getViewId()
+      // this.lookupentityname = this.context.parameters.lookupfield.getTargetEntityType()
+	    // this.viewid = this.context.parameters.lookupfield.getViewId()
       this.selectedValue = props.selectedValue
+      this.dependantValue = props.dependantValue
       this.onChange = props.onChange
       this.instanceid = props.instanceid
     }
@@ -86,6 +97,7 @@ export class PcfContextService {
 
     // remove existing attributes from view fetchxml
     fetchxmldoc.querySelectorAll('attribute').forEach(el => el.remove())
+    fetchxmldoc.querySelectorAll('link-entity[alias="dependant"]').forEach(el => el.remove())
 
     // add attributes to fetchxml
     this.getAttributes(primaryid, primaryname, primaryimage).forEach(attribute => {
@@ -95,16 +107,50 @@ export class PcfContextService {
       entityelement.appendChild(customattribute)
     })
 
+    // Add dependent filter if needed
+    // context.parameters.lookupfield.filterRelationshipName
+    // <link-entity name="driv_spaceagency" from="driv_spaceagencyid" to="driv_spaceagency" alias="bb">
+	  //   <filter type="and">
+    //     <condition attribute="driv_spaceagencyid" operator="eq" uitype="driv_spaceagency" value="c73b716b-a85f-ec11-8f8e-000d3a84327b"/>
+	  //   </filter>
+	  // </link-entity>
+
+    // linked entity name = this.context.parameters.lookupfield.dependentAttributeType : driv_spaceagency
+    // from = GetMetadata + id
+    // to = this.context.parameters.lookupfield.dependentAttributeName : driv_spaceflight.driv_spaceagency (get the part from the left)
+    // value = id from dependantlookup
+
+    // set dependant filter if needed
+    if (this.dependantEntityName() !== '' &&
+        this.dependantValue !== undefined &&
+        this.dependantValue.id !== '') {
+      const linkentity = fetchxmldoc.createElement('link-entity')
+      linkentity.setAttribute('name', this.dependantEntityName())
+      linkentity.setAttribute('from', `${this.dependantEntityName()}id`)
+      linkentity.setAttribute('to', `${this.dependantAttribute()}`)
+      linkentity.setAttribute('alias', 'dependant')
+      const filter = fetchxmldoc.createElement('filter')
+      filter.setAttribute('type', 'and')
+      const condition = fetchxmldoc.createElement('condition')
+      condition.setAttribute('attribute', `${this.dependantEntityName()}id`)
+      condition.setAttribute('operator', 'eq')
+      condition.setAttribute('uitype', this.dependantEntityName())
+      condition.setAttribute('value', this.dependantValue.id)
+      filter.appendChild(condition)
+      linkentity.appendChild(filter)
+      entityelement.appendChild(linkentity)
+    }
+
     const fetchxmlstring = new XMLSerializer().serializeToString(fetchxmldoc)
     const result = await this.context.webAPI
-      .retrieveMultipleRecords(this.lookupentityname, `?fetchXml=${fetchxmlstring}`)
+      .retrieveMultipleRecords(this.lookupentityname(), `?fetchXml=${fetchxmlstring}`)
 
     return result.entities ?? []
   }
 
   async getLookupViewFetchXml () : Promise<Document> {
     const result = await this.context.webAPI
-      .retrieveRecord('savedquery', this.context.parameters.lookupfield.getViewId())
+      .retrieveRecord('savedquery', this.viewid())
     const parser = new DOMParser()
     const fetchxml = parser.parseFromString(result.fetchxml, 'text/xml')
     return fetchxml
@@ -117,7 +163,7 @@ export class PcfContextService {
   async openRecord ():Promise<ComponentFramework.NavigationApi.OpenFormSuccessResponse> {
     return this.context.navigation.openForm(
       {
-        entityName: this.lookupentityname,
+        entityName: this.lookupentityname(),
         entityId: this.selectedValue?.id ?? ''
       }
     )

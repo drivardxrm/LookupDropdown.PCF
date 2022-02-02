@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { Stack } from '@fluentui/react/lib/Stack'
 import { usePcfContext } from '../services/PcfContext'
 import OpenRecordButton from './OpenRecordButton'
@@ -19,6 +19,22 @@ const LookupDropdown = ():JSX.Element => {
   // Custom Hook based on react-query
   const { options, isLoading, isError } = useRecordsAsOptions()
 
+  // Clear the value if the selected value is not in the options
+  // Used when a dependant lookup is changed
+  // Note : will also clear the value if the view as changed since last save
+  // and the selected record is not in the list
+  useEffect(
+    () => {
+      if (!isLoading &&
+          !isError &&
+           options.length > 1 && // IMPORTANT There is always a blank option
+           pcfcontext.selectedValue !== undefined &&
+           !options.some(option => option.key === pcfcontext.selectedValue?.id)) {
+        pcfcontext.onChange(undefined)
+      }
+    }
+    , [options, isLoading, isError, pcfcontext.selectedValue])
+
   // EVENTS
   // - When value of combobox changes, callback to PCF
   const onDropdownChanged = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption<any>|undefined, index? : number | undefined) => {
@@ -29,7 +45,7 @@ const LookupDropdown = ():JSX.Element => {
       lookupvalue = [{
         id: option.key.toString(),
         name: option.data.recordname,
-        entityType: pcfcontext.lookupentityname
+        entityType: pcfcontext.lookupentityname()
       }]
     }
 

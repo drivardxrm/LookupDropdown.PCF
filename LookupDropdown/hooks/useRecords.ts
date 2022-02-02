@@ -7,12 +7,12 @@ import { useMetadata } from './useMetadata'
 
 export const useRecords = () => {
   const pcfcontext = usePcfContext()
-  const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname)
+  const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname())
   const { fetchxml } = useLookupViewFetchXml()
 
   const { data, isLoading, isError } =
     useQuery<ComponentFramework.WebApi.Entity[], Error>(
-      ['lookuprecords', pcfcontext.instanceid],
+      ['lookuprecords', pcfcontext.instanceid, pcfcontext.dependantValue?.id],
       () => pcfcontext.getLookupRecords(primaryid, primaryname, primaryimage, fetchxml!),
       {
         enabled: Boolean(primaryname) && Boolean(fetchxml),
@@ -26,7 +26,7 @@ export const useRecords = () => {
 export const useRecordsAsOptions = () => {
   const pcfcontext = usePcfContext()
   const { records, isLoading, isError } = useRecords()
-  const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname)
+  const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname())
 
   const options:IDropdownOption[] = records
     ? [{ key: -1, text: pcfcontext.SelectText() }].concat(records.map(e => {

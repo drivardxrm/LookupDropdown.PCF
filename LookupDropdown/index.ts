@@ -40,6 +40,7 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 
 	  this._appprops = {
 	    selectedValue: undefined,
+	    dependantValue: undefined,
 	    context: context,
 	    instanceid: Date.now().toString(),
 	    onChange: this.onChange
@@ -52,8 +53,10 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	 * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
 	 */
 	public updateView (context: ComponentFramework.Context<IInputs>): void {
-	  // Add code to update control view
 	  this._appprops.selectedValue = context.parameters.lookupfield.raw[0] ?? undefined
+	  this._appprops.dependantValue = context.parameters.dependantlookupfield?.raw !== null
+	  	? context.parameters.dependantlookupfield?.raw[0]
+	    : undefined
 
 	  // RENDER React Component
 	  ReactDOM.render(
