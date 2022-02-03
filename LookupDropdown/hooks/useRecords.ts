@@ -12,7 +12,7 @@ export const useRecords = () => {
 
   const { data, isLoading, isError } =
     useQuery<ComponentFramework.WebApi.Entity[], Error>(
-      ['lookuprecords', pcfcontext.instanceid, pcfcontext.dependantValue?.id],
+      ['lookuprecords', pcfcontext.instanceid, pcfcontext.dependantValue()?.id],
       () => pcfcontext.getLookupRecords(primaryid, primaryname, primaryimage, fetchxml!),
       {
         enabled: Boolean(primaryname) && Boolean(fetchxml),

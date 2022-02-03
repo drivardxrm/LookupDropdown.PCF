@@ -21,7 +21,8 @@ const LookupDropdown = ():JSX.Element => {
 
   // Clear the value if the selected value is not in the options
   // Used when a dependant lookup is changed
-  // Note : will also clear the value if the view as changed since last save
+  // Note : will also clear the value on load of the form
+  // if the view as changed since last save
   // and the selected record is not in the list
   useEffect(
     () => {
@@ -29,7 +30,7 @@ const LookupDropdown = ():JSX.Element => {
           !isError &&
            options.length > 1 && // IMPORTANT There is always a blank option
            pcfcontext.selectedValue !== undefined &&
-           !options.some(option => option.key === pcfcontext.selectedValue?.id)) {
+           !options.some(option => option.key === pcfcontext.selectedValue()?.id)) {
         pcfcontext.onChange(undefined)
       }
     }
@@ -112,7 +113,7 @@ const LookupDropdown = ():JSX.Element => {
                 onRenderTitle={onRenderTitle}
                 onRenderOption={onRenderOption}
                 onChange={onDropdownChanged}
-                selectedKey={pcfcontext.selectedValue?.id ?? ''}
+                selectedKey={pcfcontext.selectedValue()?.id ?? ''}
                 options={options}
                 styles = {dropdownStyles}
                 theme = {dropdownTheme}

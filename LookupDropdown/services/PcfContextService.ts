@@ -5,17 +5,21 @@
 import { IInputs } from '../generated/ManifestTypes'
 
 export interface IPcfContextServiceProps{
-  selectedValue: ComponentFramework.LookupValue | undefined;
-  dependantValue: ComponentFramework.LookupValue | undefined;
   context: ComponentFramework.Context<IInputs>;
   instanceid: string;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
 }
 
 export class PcfContextService {
-  selectedValue?: ComponentFramework.LookupValue | undefined;
-  dependantValue?: ComponentFramework.LookupValue | undefined;
+  instanceid:string;
   context: ComponentFramework.Context<IInputs>;
+
+  selectedValue = ():ComponentFramework.LookupValue | undefined => this.context.parameters.lookupfield.raw[0] ?? undefined
+  dependantValue = ():ComponentFramework.LookupValue | undefined => {
+    return this.context.parameters.dependantlookupfield?.raw !== null
+      ? this.context.parameters.dependantlookupfield?.raw[0]
+      : undefined
+  }
 
   lookupentityname = ():string => this.context.parameters.lookupfield.getTargetEntityType();
 	viewid = ():string => this.context.parameters.lookupfield.getViewId()
@@ -23,7 +27,7 @@ export class PcfContextService {
   isMasked = ():boolean => !this.context.parameters.lookupfield.security?.readable;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
   showRecordImage = ():boolean => this.context.parameters.showRecordImage.raw === 'true';
-  instanceid:string;
+
   // Dependant lookup
   dependantEntityName = ():string => (this.context.parameters.lookupfield as any).dependentAttributeType ?? ''
   dependantAttribute = ():string => {
@@ -34,13 +38,9 @@ export class PcfContextService {
 
   constructor (props?:IPcfContextServiceProps) {
     if (props) {
-      this.context = props.context
-      // this.lookupentityname = this.context.parameters.lookupfield.getTargetEntityType()
-	    // this.viewid = this.context.parameters.lookupfield.getViewId()
-      this.selectedValue = props.selectedValue
-      this.dependantValue = props.dependantValue
-      this.onChange = props.onChange
       this.instanceid = props.instanceid
+      this.context = props.context
+      this.onChange = props.onChange
     }
   }
 
@@ -107,23 +107,10 @@ export class PcfContextService {
       entityelement.appendChild(customattribute)
     })
 
-    // Add dependent filter if needed
-    // context.parameters.lookupfield.filterRelationshipName
-    // <link-entity name="driv_spaceagency" from="driv_spaceagencyid" to="driv_spaceagency" alias="bb">
-	  //   <filter type="and">
-    //     <condition attribute="driv_spaceagencyid" operator="eq" uitype="driv_spaceagency" value="c73b716b-a85f-ec11-8f8e-000d3a84327b"/>
-	  //   </filter>
-	  // </link-entity>
-
-    // linked entity name = this.context.parameters.lookupfield.dependentAttributeType : driv_spaceagency
-    // from = GetMetadata + id
-    // to = this.context.parameters.lookupfield.dependentAttributeName : driv_spaceflight.driv_spaceagency (get the part from the left)
-    // value = id from dependantlookup
-
     // set dependant filter if needed
     if (this.dependantEntityName() !== '' &&
-        this.dependantValue !== undefined &&
-        this.dependantValue.id !== '') {
+        this.dependantValue() !== undefined &&
+        this.dependantValue()?.id !== '') {
       const linkentity = fetchxmldoc.createElement('link-entity')
       linkentity.setAttribute('name', this.dependantEntityName())
       linkentity.setAttribute('from', `${this.dependantEntityName()}id`)
@@ -135,7 +122,7 @@ export class PcfContextService {
       condition.setAttribute('attribute', `${this.dependantEntityName()}id`)
       condition.setAttribute('operator', 'eq')
       condition.setAttribute('uitype', this.dependantEntityName())
-      condition.setAttribute('value', this.dependantValue.id)
+      condition.setAttribute('value', this.dependantValue()?.id ?? '')
       filter.appendChild(condition)
       linkentity.appendChild(filter)
       entityelement.appendChild(linkentity)
@@ -164,7 +151,7 @@ export class PcfContextService {
     return this.context.navigation.openForm(
       {
         entityName: this.lookupentityname(),
-        entityId: this.selectedValue?.id ?? ''
+        entityId: this.selectedValue()?.id ?? ''
       }
     )
   }
