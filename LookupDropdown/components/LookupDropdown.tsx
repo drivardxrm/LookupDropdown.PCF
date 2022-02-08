@@ -20,7 +20,7 @@ const LookupDropdown = ():JSX.Element => {
   const { options, isLoading, isError } = useRecordsAsOptions()
 
   // Clear the value if the selected value is not in the options
-  // Used when a dependant lookup is changed
+  // Used when a dependent lookup is changed
   // Note : will also clear the value on load of the form
   // if the view as changed since last save
   // and the selected record is not in the list

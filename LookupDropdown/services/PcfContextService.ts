@@ -15,9 +15,9 @@ export class PcfContextService {
   context: ComponentFramework.Context<IInputs>;
 
   selectedValue = ():ComponentFramework.LookupValue | undefined => this.context.parameters.lookupfield.raw[0] ?? undefined
-  dependantValue = ():ComponentFramework.LookupValue | undefined => {
-    return this.context.parameters.dependantlookupfield?.raw !== null
-      ? this.context.parameters.dependantlookupfield?.raw[0]
+  dependentValue = ():ComponentFramework.LookupValue | undefined => {
+    return this.context.parameters.dependentlookupfield?.raw !== null
+      ? this.context.parameters.dependentlookupfield?.raw[0]
       : undefined
   }
 
@@ -28,9 +28,9 @@ export class PcfContextService {
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
   showRecordImage = ():boolean => this.context.parameters.showRecordImage.raw === 'true';
 
-  // Dependant lookup
-  dependantEntityName = ():string => (this.context.parameters.lookupfield as any).dependentAttributeType ?? ''
-  dependantAttribute = ():string => {
+  // Dependent lookup
+  dependentEntityName = ():string => (this.context.parameters.lookupfield as any).dependentAttributeType ?? ''
+  dependentAttribute = ():string => {
     const dependantAttribute = (this.context.parameters.lookupfield as any).dependentAttributeName ?? ''
     const splitted = dependantAttribute.split('.')
     return splitted[splitted.length - 1]
@@ -97,7 +97,7 @@ export class PcfContextService {
 
     // remove existing attributes from view fetchxml
     fetchxmldoc.querySelectorAll('attribute').forEach(el => el.remove())
-    fetchxmldoc.querySelectorAll('link-entity[alias="dependant"]').forEach(el => el.remove())
+    fetchxmldoc.querySelectorAll('link-entity[alias="dependent"]').forEach(el => el.remove())
 
     // add attributes to fetchxml
     this.getAttributes(primaryid, primaryname, primaryimage).forEach(attribute => {
@@ -107,22 +107,22 @@ export class PcfContextService {
       entityelement.appendChild(customattribute)
     })
 
-    // set dependant filter if needed
-    if (this.dependantEntityName() !== '' &&
-        this.dependantValue() !== undefined &&
-        this.dependantValue()?.id !== '') {
+    // set dependent filter if needed
+    if (this.dependentEntityName() !== '' &&
+        this.dependentValue() !== undefined &&
+        this.dependentValue()?.id !== '') {
       const linkentity = fetchxmldoc.createElement('link-entity')
-      linkentity.setAttribute('name', this.dependantEntityName())
-      linkentity.setAttribute('from', `${this.dependantEntityName()}id`)
-      linkentity.setAttribute('to', `${this.dependantAttribute()}`)
-      linkentity.setAttribute('alias', 'dependant')
+      linkentity.setAttribute('name', this.dependentEntityName())
+      linkentity.setAttribute('from', `${this.dependentEntityName()}id`)
+      linkentity.setAttribute('to', `${this.dependentAttribute()}`)
+      linkentity.setAttribute('alias', 'dependent')
       const filter = fetchxmldoc.createElement('filter')
       filter.setAttribute('type', 'and')
       const condition = fetchxmldoc.createElement('condition')
-      condition.setAttribute('attribute', `${this.dependantEntityName()}id`)
+      condition.setAttribute('attribute', `${this.dependentEntityName()}id`)
       condition.setAttribute('operator', 'eq')
-      condition.setAttribute('uitype', this.dependantEntityName())
-      condition.setAttribute('value', this.dependantValue()?.id ?? '')
+      condition.setAttribute('uitype', this.dependentEntityName())
+      condition.setAttribute('value', this.dependentValue()?.id ?? '')
       filter.appendChild(condition)
       linkentity.appendChild(filter)
       entityelement.appendChild(linkentity)
