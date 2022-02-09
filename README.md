@@ -3,7 +3,10 @@
  
  * **UPDATE 2022-01-20 : PLEASE USE v1.0.0.2 or above, a 🐛 was found in earlier versions**
  
- * Blog post : https://itmustbecode.com/better-ux-with-a-lookup-dropdown-pcf-control/
+ * Blog posts : 
+ * https://itmustbecode.com/better-ux-with-a-lookup-dropdown-pcf-control/
+ * https://itmustbecode.com/related-record-filtering-with-the-lookup-dropdown-pcf/
+ 
  * Download latest version here : https://github.com/drivardxrm/LookupDropdown.PCF/releases/latest
 
 #### Features:
@@ -22,6 +25,10 @@
 
 ![image](https://user-images.githubusercontent.com/38399134/147574921-388d1e41-3873-4a03-aa8d-9e64a103621f.png)
 
+* Support for Related Record Filtering (cascading)
+
+
+![lookupdropdown-dependant2](https://user-images.githubusercontent.com/38399134/153111779-cceb0486-65f3-45b8-a12a-6bc5414b9d21.gif)
 
 
 
@@ -36,6 +43,7 @@ react-query : https://react-query.tanstack.com/
 | lookupfield  | REQUIRED: Bound Lookup field to render as dropdown                             |             |
 | customtext  | OPTIONAL: Customize display text with any text attributes of the record. put attribute schema names between brackets {}. Ex. {new_firstname} {new_lastname}. Leave blank to show record primaryname|             |
 | customselecttext    | OPTIONAL: Custom text for dropdown selector text (default = Select)    | |
+| dependentlookupfield | OPTIONAL: Dependent Lookup field. Use when Related Records Filtering is set on the Field Properties    | |
 | showRecordImage   | Show the record image beside the text | false  |
 | showOpenRecordButton | Show a button next to the dropdown to open the selected record form.|  false    |
 
