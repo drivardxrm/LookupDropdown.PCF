@@ -1,4 +1,4 @@
-# LookupDropdown.PCF
+# LookupDropdown.PCF ![GitHub all releases](https://img.shields.io/github/downloads/drivardxrm/LookupDropdown.PCF/total?style=plastic)
  PowerApps Component framework (PCF) Control that renders a lookup field as a dropdown
  
  * **UPDATE 2022-01-20 : PLEASE USE v1.0.0.2 or above, a 🐛 was found in earlier versions**
