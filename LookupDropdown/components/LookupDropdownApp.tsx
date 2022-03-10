@@ -26,7 +26,7 @@ const LookupDropdownApp = (props:IPcfContextServiceProps): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient} contextSharing={false}>
       <PcfContextProvider pcfcontext={pcfcontextservice}>
-      { pcfcontextservice.isMasked()
+      { pcfcontextservice.isMasked
         ? <MaskedInput/>
         : <LookupDropdown />
       }

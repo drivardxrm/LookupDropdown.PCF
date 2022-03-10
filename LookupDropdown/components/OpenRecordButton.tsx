@@ -2,12 +2,14 @@
 import { IconButton } from '@fluentui/react/lib/Button'
 import { IIconProps } from '@fluentui/react/lib/Icon'
 import * as React from 'react'
+import { useLookupView } from '../hooks/useLookupView'
 import { usePcfContext } from '../services/PcfContext'
 
 const openbuttonicon: IIconProps = { iconName: 'OpenInNewWindow' }
 // eslint-disable-next-line no-undef
 const OpenRecordButton = ():JSX.Element => {
   const pcfcontext = usePcfContext()
+  const { entityname } = useLookupView()
 
   return <IconButton
             iconProps={openbuttonicon}
@@ -15,7 +17,7 @@ const OpenRecordButton = ():JSX.Element => {
             ariaLabel="Open record"
             disabled={pcfcontext.selectedValue === undefined}
             onClick={() => {
-              pcfcontext.openRecord()
+              pcfcontext.openRecord(entityname)
             }}
           />
 }

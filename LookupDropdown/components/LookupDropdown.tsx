@@ -8,6 +8,7 @@ import { Dropdown, IDropdownOption, IDropdown } from '@fluentui/react/lib/Dropdo
 import { ImageIcon } from '@fluentui/react/lib/Icon'
 import { useRecordsAsOptions } from '../hooks/useRecords'
 import { dropdownIconOptionstyle, dropdownIcontitlestyle, dropdownStyles, dropdownTextstyle, dropdownTheme } from '../styles/DropdownStyles'
+import { useLookupView } from '../hooks/useLookupView'
 export interface ILookupDropdownProps{
   entity: string;
 }
@@ -18,6 +19,7 @@ const LookupDropdown = ():JSX.Element => {
   const pcfcontext = usePcfContext()
   // Custom Hook based on react-query
   const { options, isLoading, isError } = useRecordsAsOptions()
+  const { entityname } = useLookupView()
 
   // Clear the value if the selected value is not in the options
   // Used when a dependent lookup is changed
@@ -30,7 +32,7 @@ const LookupDropdown = ():JSX.Element => {
           !isError &&
            options.length > 1 && // IMPORTANT There is always a blank option
            pcfcontext.selectedValue !== undefined &&
-           !options.some(option => option.key === pcfcontext.selectedValue()?.id)) {
+           !options.some(option => option.key === pcfcontext.selectedValue?.id)) {
         pcfcontext.onChange(undefined)
       }
     }
@@ -46,7 +48,7 @@ const LookupDropdown = ():JSX.Element => {
       lookupvalue = [{
         id: option.key.toString(),
         name: option.data.recordname,
-        entityType: pcfcontext.lookupentityname()
+        entityType: entityname
       }]
     }
 
@@ -57,7 +59,7 @@ const LookupDropdown = ():JSX.Element => {
   const onRenderOption = (option: IDropdownOption | undefined): JSX.Element => {
     return (
       <div style={dropdownTextstyle}>
-        {pcfcontext.showRecordImage() && option && option.data && (
+        {pcfcontext.showRecordImage && option && option.data && (
           <ImageIcon
             style={dropdownIconOptionstyle}
             imageProps={{
@@ -79,7 +81,7 @@ const LookupDropdown = ():JSX.Element => {
     const option = options![0]
     return (
       <div style={dropdownTextstyle}>
-        {pcfcontext.showRecordImage() && option && option.data && option.data.imagesrc && (
+        {pcfcontext.showRecordImage && option && option.data && option.data.imagesrc && (
           <ImageIcon
             style={dropdownIcontitlestyle}
             imageProps={{
@@ -113,11 +115,11 @@ const LookupDropdown = ():JSX.Element => {
                 onRenderTitle={onRenderTitle}
                 onRenderOption={onRenderOption}
                 onChange={onDropdownChanged}
-                selectedKey={pcfcontext.selectedValue()?.id ?? ''}
+                selectedKey={pcfcontext.selectedValue?.id ?? ''}
                 options={options}
                 styles = {dropdownStyles}
                 theme = {dropdownTheme}
-                disabled={pcfcontext.isReadOnly()}
+                disabled={pcfcontext.isReadOnly}
               />
             </Stack.Item>
             {pcfcontext.context.parameters.showOpenRecordButton.raw === 'true' && (

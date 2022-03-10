@@ -2,20 +2,20 @@
 import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
 import { useQuery } from 'react-query'
 import { usePcfContext } from '../services/PcfContext'
-import { useLookupViewFetchXml } from './useLookupViewFetchXml'
+import { useLookupView } from './useLookupView'
 import { useMetadata } from './useMetadata'
 
 export const useRecords = () => {
   const pcfcontext = usePcfContext()
-  const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname())
-  const { fetchxml } = useLookupViewFetchXml()
+  const { entityname, fetchxml } = useLookupView()
+  const { primaryid, primaryname, primaryimage, metadata } = useMetadata(entityname)
 
   const { data, isLoading, isError } =
     useQuery<ComponentFramework.WebApi.Entity[], Error>(
-      ['lookuprecords', pcfcontext.instanceid, pcfcontext.dependentValue()?.id],
-      () => pcfcontext.getLookupRecords(primaryid, primaryname, primaryimage, fetchxml!),
+      ['lookuprecords', pcfcontext.instanceid, pcfcontext.dependentValue?.id],
+      () => pcfcontext.getLookupRecords(entityname, primaryid, primaryname, primaryimage, fetchxml, metadata!),
       {
-        enabled: Boolean(primaryname) && Boolean(fetchxml),
+        enabled: !!entityname && !!primaryid && !!fetchxml,
         staleTime: Infinity
       }
     )
@@ -26,7 +26,8 @@ export const useRecords = () => {
 export const useRecordsAsOptions = () => {
   const pcfcontext = usePcfContext()
   const { records, isLoading, isError } = useRecords()
-  const { primaryid, primaryname, primaryimage } = useMetadata(pcfcontext.lookupentityname())
+  const { entityname } = useLookupView()
+  const { primaryid, primaryname, primaryimage } = useMetadata(entityname)
 
   const options:IDropdownOption[] = records
     ? [{ key: -1, text: pcfcontext.SelectText() }].concat(records.map(e => {

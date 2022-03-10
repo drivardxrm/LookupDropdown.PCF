@@ -40,7 +40,7 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 
 	  this._appprops = {
 	    context: context,
-	    instanceid: Date.now().toString(),
+	    instanceid: Math.random(),
 	    onChange: this.onChange
 	  }
 	  container.appendChild(this._container)

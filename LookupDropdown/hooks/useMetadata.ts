@@ -10,14 +10,18 @@ export const useMetadata = (entityname:string) => {
       ['metadata', entityname, pcfcontext.instanceid],
       () => pcfcontext.getEntityMetadata(entityname),
       {
+        enabled: entityname !== null && entityname !== undefined && entityname !== '',
         staleTime: Infinity
       }
     )
 
   return {
+    metadata: data,
     primaryid: data?.PrimaryIdAttribute,
     primaryname: data?.PrimaryNameAttribute,
     primaryimage: data?.PrimaryImageAttribute,
+    manytoonerelationships: data?.ManyToOneRelationships,
+    onetomanyrelationships: data?.OneToManyRelationships,
     isLoading,
     isError
   }
