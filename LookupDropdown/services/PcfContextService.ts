@@ -37,7 +37,6 @@ export class PcfContextService {
         : undefined
       this.dependentEntityName = (props.context.parameters.lookupfield as any).dependentAttributeType ?? ''
       this.filterRelationshipName = (props.context.parameters.lookupfield as any).filterRelationshipName ?? ''
-      // this.dependentAttribute = 'TODO'
       this.onChange = props.onChange
     }
   }
@@ -114,24 +113,14 @@ export class PcfContextService {
         this.dependentValue?.id !== '') {
       const manytoonerelationship = metadata.ManyToOneRelationships.getByName(this.filterRelationshipName)
       const onetomanyrelationship = metadata.OneToManyRelationships.getByName(this.filterRelationshipName)
+      const manytomanyrelationship = metadata.ManyToManyRelationships.getByName(this.filterRelationshipName)
 
-      const from = manytoonerelationship ? `${this.dependentEntityName}id` : onetomanyrelationship.ReferencingAttribute
-      const to = manytoonerelationship ? manytoonerelationship.ReferencingAttribute : `${entityname}id`
+      const linkentity = manytoonerelationship
+        ? this.getManyToOneLinkEntity(manytoonerelationship)
+        : (onetomanyrelationship
+            ? this.getOneToManyLinkEntity(onetomanyrelationship, entityname)
+            : this.getManyToManyLinkEntity(manytomanyrelationship, entityname))
 
-      const linkentity = fetchxmldoc.createElement('link-entity')
-      linkentity.setAttribute('name', this.dependentEntityName)
-      linkentity.setAttribute('from', from)
-      linkentity.setAttribute('to', to)
-      linkentity.setAttribute('alias', 'dependent')
-      const filter = fetchxmldoc.createElement('filter')
-      filter.setAttribute('type', 'and')
-      const condition = fetchxmldoc.createElement('condition')
-      condition.setAttribute('attribute', `${this.dependentEntityName}id`)
-      condition.setAttribute('operator', 'eq')
-      condition.setAttribute('uitype', this.dependentEntityName)
-      condition.setAttribute('value', this.dependentValue?.id ?? '')
-      filter.appendChild(condition)
-      linkentity.appendChild(filter)
       entityelement.appendChild(linkentity)
     }
 
@@ -140,6 +129,96 @@ export class PcfContextService {
       .retrieveMultipleRecords(entityname, `?fetchXml=${fetchxmlstring}`)
 
     return result.entities ?? []
+  }
+
+  private getManyToOneLinkEntity (manytoonerelationship:any) :HTMLElement {
+    const from = `${this.dependentEntityName}id`
+    const to = manytoonerelationship.ReferencingAttribute
+
+    const linkentity = document.createElement('link-entity')
+    linkentity.setAttribute('name', this.dependentEntityName)
+    linkentity.setAttribute('from', from)
+    linkentity.setAttribute('to', to)
+    linkentity.setAttribute('alias', 'dependent')
+
+    const filter = document.createElement('filter')
+    filter.setAttribute('type', 'and')
+
+    const condition = document.createElement('condition')
+    condition.setAttribute('attribute', `${this.dependentEntityName}id`)
+    condition.setAttribute('operator', 'eq')
+    condition.setAttribute('uitype', this.dependentEntityName)
+    condition.setAttribute('value', this.dependentValue?.id ?? '')
+
+    filter.appendChild(condition)
+    linkentity.appendChild(filter)
+
+    return linkentity
+  }
+
+  private getOneToManyLinkEntity (onetomanyrelationship:any, baseentityname:string) :HTMLElement {
+    const from = onetomanyrelationship.ReferencingAttribute
+    const to = `${baseentityname}id`
+
+    const linkentity = document.createElement('link-entity')
+    linkentity.setAttribute('name', this.dependentEntityName)
+    linkentity.setAttribute('from', from)
+    linkentity.setAttribute('to', to)
+    linkentity.setAttribute('alias', 'dependent')
+
+    const filter = document.createElement('filter')
+    filter.setAttribute('type', 'and')
+
+    const condition = document.createElement('condition')
+    condition.setAttribute('attribute', `${this.dependentEntityName}id`)
+    condition.setAttribute('operator', 'eq')
+    condition.setAttribute('uitype', this.dependentEntityName)
+    condition.setAttribute('value', this.dependentValue?.id ?? '')
+
+    filter.appendChild(condition)
+    linkentity.appendChild(filter)
+
+    return linkentity
+  }
+
+  private getManyToManyLinkEntity (manytomanyrelationship:any, baseentityname:string) :HTMLElement {
+    const intersectentity = manytomanyrelationship.IntersectEntityName
+    const intersectFromTo = manytomanyrelationship.Entity1LogicalName === baseentityname
+      ? manytomanyrelationship.Entity1IntersectAttribute
+      : manytomanyrelationship.Entity2IntersectAttribute
+
+    const dependententity = manytomanyrelationship.Entity1LogicalName === baseentityname
+      ? manytomanyrelationship.Entity2LogicalName
+      : manytomanyrelationship.Entity1LogicalName
+
+    const dependententityFromTo = manytomanyrelationship.Entity1LogicalName === baseentityname
+      ? manytomanyrelationship.Entity2IntersectAttribute
+      : manytomanyrelationship.Entity1IntersectAttribute
+
+    const linkentity1 = document.createElement('link-entity')
+    linkentity1.setAttribute('name', intersectentity)
+    linkentity1.setAttribute('from', intersectFromTo)
+    linkentity1.setAttribute('to', intersectFromTo)
+
+    const linkentity2 = document.createElement('link-entity')
+    linkentity2.setAttribute('name', dependententity)
+    linkentity2.setAttribute('from', dependententityFromTo)
+    linkentity2.setAttribute('to', dependententityFromTo)
+    linkentity2.setAttribute('alias', 'dependent')
+
+    const filter = document.createElement('filter')
+    filter.setAttribute('type', 'and')
+
+    const condition = document.createElement('condition')
+    condition.setAttribute('attribute', dependententityFromTo)
+    condition.setAttribute('operator', 'eq')
+    condition.setAttribute('uitype', dependententity)
+    condition.setAttribute('value', this.dependentValue?.id ?? '')
+
+    filter.appendChild(condition)
+    linkentity2.appendChild(filter)
+    linkentity1.appendChild(linkentity2)
+    return linkentity1
   }
 
   async getLookupView () : Promise<ComponentFramework.WebApi.Entity> {
