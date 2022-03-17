@@ -111,9 +111,9 @@ export class PcfContextService {
         this.dependentEntityName !== '' &&
         this.dependentValue !== undefined &&
         this.dependentValue?.id !== '') {
-      const manytoonerelationship = metadata.ManyToOneRelationships.getByName(this.filterRelationshipName)
-      const onetomanyrelationship = metadata.OneToManyRelationships.getByName(this.filterRelationshipName)
-      const manytomanyrelationship = metadata.ManyToManyRelationships.getByName(this.filterRelationshipName)
+      const manytoonerelationship = metadata.ManyToOneRelationships?.getByName(this.filterRelationshipName)
+      const onetomanyrelationship = metadata.OneToManyRelationships?.getByName(this.filterRelationshipName)
+      const manytomanyrelationship = metadata.ManyToManyRelationships?.getByName(this.filterRelationshipName)
 
       const linkentity = manytoonerelationship
         ? this.getManyToOneLinkEntity(manytoonerelationship)
