@@ -63,7 +63,11 @@ export class PcfContextService {
       // Custom text
       let customtext = this.context.parameters.customtext.raw
       this.CustomTextAttributes().forEach(attribute => {
-        customtext = this.replaceAll(customtext, `{${attribute}}`, record[`${attribute}`] ?? '')
+        // check if there is a formated value for the attribute (ex. Choice, Date, Lookup etc)
+        const formatedValue = record[`${attribute}@OData.Community.Display.V1.FormattedValue`] ??
+                              record[`_${attribute}_value@OData.Community.Display.V1.FormattedValue`] ??
+                              record[`${attribute}`]
+        customtext = this.replaceAll(customtext, `{${attribute}}`, formatedValue ?? '')
       })
 
       return customtext
