@@ -1,6 +1,5 @@
 /* eslint-disable no-use-before-define */
-import * as React from 'react'
-import { QueryCache, QueryClient, QueryClientProvider } from 'react-query'
+import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PcfContextProvider } from '../services/PcfContext'
 import { IPcfContextServiceProps, PcfContextService } from '../services/PcfContextService'
 import LookupDropdown from './LookupDropdown'

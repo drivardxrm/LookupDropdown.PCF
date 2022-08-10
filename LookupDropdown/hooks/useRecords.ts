@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
+
 import { usePcfContext } from '../services/PcfContext'
 import { useLookupView } from './useLookupView'
 import { useMetadata } from './useMetadata'

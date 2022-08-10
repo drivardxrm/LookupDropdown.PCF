@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
-import { useQuery } from 'react-query'
+
+import { useQuery } from '@tanstack/react-query'
 import { usePcfContext } from '../services/PcfContext'
 
 export const useMetadata = (entityname:string) => {

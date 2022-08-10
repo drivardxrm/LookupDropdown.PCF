@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 // eslint-disable-next-line no-use-before-define
-import * as React from 'react'
 import { mergeStyles } from '@fluentui/react/lib/Styling'
 import { FontIcon } from '@fluentui/react/lib/Icon'
 import { Stack } from '@fluentui/react/lib/Stack'

@@ -4,10 +4,10 @@ import { useRef, useEffect } from 'react'
 import { Stack } from '@fluentui/react/lib/Stack'
 import { usePcfContext } from '../services/PcfContext'
 import OpenRecordButton from './OpenRecordButton'
-import { Dropdown, IDropdownOption, IDropdown } from '@fluentui/react/lib/Dropdown'
+import { Dropdown, IDropdownOption, IDropdown, IDropdownProps } from '@fluentui/react/lib/Dropdown'
 import { ImageIcon } from '@fluentui/react/lib/Icon'
 import { useRecordsAsOptions } from '../hooks/useRecords'
-import { dropdownIconOptionstyle, dropdownIcontitlestyle, dropdownStyles, dropdownTextstyle, dropdownTheme } from '../styles/DropdownStyles'
+import { dropdownIconOptionStyle, dropdownIcontitleStyle, dropdownStyles, dropdownTextStyle, dropdownTheme } from '../styles/DropdownStyles'
 import { useLookupView } from '../hooks/useLookupView'
 export interface ILookupDropdownProps{
   entity: string;
@@ -22,14 +22,12 @@ const LookupDropdown = ():JSX.Element => {
   const { entityname } = useLookupView()
 
   // Clear the value if the selected value is not in the options
-  // Used when a dependent lookup is changed
-  // Note : will also clear the value on load of the form
-  // if the view as changed since last save
-  // and the selected record is not in the list
+  // Only Used when a dependent lookup is changed
   useEffect(
     () => {
       if (!isLoading &&
           !isError &&
+           pcfcontext.dependentValue !== undefined && // Only clear if a dependent value is set
            options.length > 1 && // IMPORTANT There is always a blank option
            pcfcontext.selectedValue !== undefined &&
            !options.some(option => option.key === pcfcontext.selectedValue?.id)) {
@@ -38,7 +36,18 @@ const LookupDropdown = ():JSX.Element => {
     }
     , [options, isLoading, isError, pcfcontext.selectedValue])
 
+  const placeholder = pcfcontext.selectedValue === undefined || options.some(option => option.key === pcfcontext.selectedValue?.id) ? '---' : `--${pcfcontext.selectedValue?.name}--`
+
   // EVENTS
+  // eslint-disable-next-line no-undef
+  const onRenderPlaceholder = (props: IDropdownProps|undefined): JSX.Element => {
+    return (
+      <div style={dropdownTextStyle}>
+          <em>{props?.placeholder}</em>
+      </div>
+    )
+  }
+
   // - When value of combobox changes, callback to PCF
   const onDropdownChanged = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption<any>|undefined, index? : number | undefined) => {
     let lookupvalue
@@ -58,10 +67,10 @@ const LookupDropdown = ():JSX.Element => {
   // eslint-disable-next-line no-undef
   const onRenderOption = (option: IDropdownOption | undefined): JSX.Element => {
     return (
-      <div style={dropdownTextstyle}>
+      <div style={dropdownTextStyle}>
         {pcfcontext.showRecordImage && option && option.data && (
           <ImageIcon
-            style={dropdownIconOptionstyle}
+            style={dropdownIconOptionStyle}
             imageProps={{
               src: option.data.imagesrc,
               width: 25,
@@ -80,10 +89,10 @@ const LookupDropdown = ():JSX.Element => {
   const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element => {
     const option = options![0]
     return (
-      <div style={dropdownTextstyle}>
+      <div style={dropdownTextStyle}>
         {pcfcontext.showRecordImage && option && option.data && option.data.imagesrc && (
           <ImageIcon
-            style={dropdownIcontitlestyle}
+            style={dropdownIcontitleStyle}
             imageProps={{
               src: option.data.imagesrc,
               width: 25,
@@ -110,8 +119,9 @@ const LookupDropdown = ():JSX.Element => {
           <Stack horizontal>
             <Stack.Item grow={9}>
               <Dropdown
-                placeholder="---"
+                placeholder={placeholder}
                 componentRef={dropdownRef}
+                onRenderPlaceholder={onRenderPlaceholder}
                 onRenderTitle={onRenderTitle}
                 onRenderOption={onRenderOption}
                 onChange={onDropdownChanged}

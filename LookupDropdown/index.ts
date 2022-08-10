@@ -4,19 +4,20 @@
 /* eslint-disable no-tabs */
 /* eslint-disable no-undef */
 import { IInputs, IOutputs } from './generated/ManifestTypes'
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+import { createRoot, Root } from 'react-dom/client'
 import LookupDropdownApp from './components/LookupDropdownApp'
 import { IPcfContextServiceProps } from './services/PcfContextService'
 import { initializeIcons } from '@fluentui/react/lib/Icons'
+import { createElement } from 'react'
 
 initializeIcons(undefined, { disableWarnings: true })
 
 export class LookupDropdown implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 	private _notifyOutputChanged:() => void;
-	private _container: HTMLDivElement;
+	// private _container: HTMLDivElement;
 	private _selectedValue: ComponentFramework.LookupValue[] | undefined;
 	private _appprops:IPcfContextServiceProps;
+	private _root: Root;
 
 	/**
 	 * Empty constructor.
@@ -36,14 +37,13 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	public init (context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void {
 	  // Add control initialization code
 	  this._notifyOutputChanged = notifyOutputChanged
-	  this._container = document.createElement('div')
+	  this._root = createRoot(container!)
 
 	  this._appprops = {
 	    context: context,
 	    instanceid: Math.random(),
 	    onChange: this.onChange
 	  }
-	  container.appendChild(this._container)
 	}
 
 	/**
@@ -53,10 +53,7 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	public updateView (context: ComponentFramework.Context<IInputs>): void {
 	  this._appprops.context = context
 	  // RENDER React Component
-	  ReactDOM.render(
-	    React.createElement(LookupDropdownApp, this._appprops),
-	    this._container
-	  )
+	  this._root.render(createElement(LookupDropdownApp, this._appprops))
 	}
 
 	onChange = (newValue: ComponentFramework.LookupValue[] | undefined): void => {
@@ -80,6 +77,6 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	 */
 	public destroy (): void {
 	  // Add code to cleanup control if necessary
-	  ReactDOM.unmountComponentAtNode(this._container)
+	  this._root.unmount()
 	}
 }

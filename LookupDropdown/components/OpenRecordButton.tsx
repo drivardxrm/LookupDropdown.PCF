@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define */
 import { IconButton } from '@fluentui/react/lib/Button'
 import { IIconProps } from '@fluentui/react/lib/Icon'
-import * as React from 'react'
 import { useLookupView } from '../hooks/useLookupView'
 import { usePcfContext } from '../services/PcfContext'
 
