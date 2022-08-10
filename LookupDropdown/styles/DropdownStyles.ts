@@ -96,6 +96,6 @@ export const dropdownStyles = (props: IDropdownStyleProps):Partial<IDropdownStyl
   }]
 })
 
-export const dropdownIconOptionstyle = { marginRight: '8px', width: 25, height: 25 }
-export const dropdownIcontitlestyle = { marginRight: '8px', marginTop: '3px', width: 25, height: 25 }
-export const dropdownTextstyle = { display: 'inline-flex' }
+export const dropdownIconOptionStyle = { marginRight: '8px', width: 25, height: 25 }
+export const dropdownIcontitleStyle = { marginRight: '8px', marginTop: '3px', width: 25, height: 25 }
+export const dropdownTextStyle = { display: 'inline-flex' }

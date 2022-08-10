@@ -1,11 +1,10 @@
 /* eslint-disable no-use-before-define */
-import { useContext } from 'react'
-import React = require('react')
+import { createContext, ReactNode, useContext } from 'react'
 import { PcfContextService } from './PcfContextService'
 
 interface PcfContextProviderProps {
    pcfcontext:PcfContextService,
-   children: React.ReactNode
+   children: ReactNode
 };
 
 export const PcfContextProvider = ({ pcfcontext, children }: PcfContextProviderProps) => {
@@ -16,7 +15,7 @@ export const PcfContextProvider = ({ pcfcontext, children }: PcfContextProviderP
   )
 }
 
-const PcfContext = React.createContext<PcfContextService>(undefined!)
+const PcfContext = createContext<PcfContextService>(undefined!)
 
 export const usePcfContext = () => {
   return useContext(PcfContext)
