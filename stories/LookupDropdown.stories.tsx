@@ -27,13 +27,6 @@ export default {
   },
   // More on argTypes: https://storybook.js.org/docs/html/api/argtypes
   argTypes: {
-    FirstDayOfWeek: {
-      control: 'select',
-      options: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    },
-    SelectedDateValue: {
-      control: 'date'
-    }
   },
 } as Meta<StoryArgs>;
 
