@@ -3,7 +3,11 @@ module.exports = {
     "browser": true,
     "es2021": true
   },
-  "extends": ["standard", "plugin:storybook/recommended"],
+  // "extends": ["standard", "plugin:storybook/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 12,
