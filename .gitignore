@@ -13,3 +13,5 @@
 /bin
 /obj
 .vscode/settings.json
+
+/storybook-static
