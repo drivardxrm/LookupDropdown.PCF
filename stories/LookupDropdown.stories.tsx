@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { Meta, StoryObj } from '@storybook/react'
+import React from 'react';
 
-import { ComponentFrameworkMockGenerator, EnumPropertyMock, LookupPropertyMock, StringPropertyMock } from '@shko.online/componentframework-mock'
+import type { Meta, StoryObj } from '@storybook/react'
+
+import { useEffect, useRef, useState } from 'react'
+
+import { ComponentFrameworkMockGenerator, EnumPropertyMock, LookupPropertyMock, ShkoOnline, StringPropertyMock } from '@shko.online/componentframework-mock'
 
 import { LookupDropdown as Component } from '../LookupDropdown/index'
 import { IInputs, IOutputs } from '../LookupDropdown/generated/ManifestTypes'
@@ -69,7 +72,7 @@ const Template = ({ }: StoryArgs) => {
       PrimaryImageAttribute: 'entityimage',
       ManyToOneRelationships: [],
       OneToManyRelationships: []
-    }])
+    } as ShkoOnline.EntityMetadata])
 
     mockGenerator.context._parameters.lookupfield.security = {
       editable: true,
@@ -113,23 +116,22 @@ const Template = ({ }: StoryArgs) => {
           nextLink: ''
         })
       })
-    })
-    mockGenerator.context._SetCanvasItems(
-      {
-        lookupfield: args.lookupfield,
-        customselecttext: args.customselecttext,
-        customtext: args.customtext,
-        showOpenRecordButton: args.showOpenRecordButton ? 'true' : 'false',
-        showRecordImage: args.showRecordImage ? 'true' : 'false'
-      }
-    )
+    });
 
-    mockGenerator.notifyOutputChanged.callsFake(() => {
+    mockGenerator.onOutputChanged.callsFake(() => {
       const { dependentlookupfield, lookupfield } = mockGenerator.control.getOutputs?.() || {}
       console.log(dependentlookupfield)
       console.log(lookupfield)
       updateArgs({ lookupfield: lookupfield?.[0], dependentlookupfield: dependentlookupfield?.[0] })
-    })
+    });
+
+    mockGenerator.context._SetCanvasItems(
+      {
+        lookupfield: args.lookupfield,
+        customselecttext: args.customselecttext,
+        customtext: args.customtext
+      }
+    )
 
     mockGenerator.ExecuteInit()
     return mockGenerator
@@ -137,11 +139,12 @@ const Template = ({ }: StoryArgs) => {
 
 
   if (mockGenerator) {
-
-    //mockGenerator.metadata.UpdateValue('customtext', '!CanvasApp', args.customtext)
-    // mockGenerator.metadata.UpdateValue('customtext', '!CanvasApp', args.customtext)
-    // mockGenerator.metadata.UpdateValue('customselecttext', '!CanvasApp', args.customselecttext)
-    // mockGenerator.metadata.UpdateValue('showOpenRecordButton', '!CanvasApp', args.showOpenRecordButton ? 'true' : 'false')
+    mockGenerator.context._parameters.customselecttext._SetValue(args.customselecttext);
+    mockGenerator.context._parameters.customtext._SetValue(args.customtext);
+    mockGenerator.context._parameters.dependentlookupfield._SetValue( args.dependentlookupfield );
+    mockGenerator.context._parameters.lookupfield._SetValue( args.lookupfield );
+    mockGenerator.context._parameters.showOpenRecordButton._SetValue( args.showOpenRecordButton ? 'true' : 'false');
+    mockGenerator.context._parameters.showRecordImage._SetValue( args.showRecordImage ? 'true' : 'false');
     mockGenerator.ExecuteUpdateView()
   }
      
