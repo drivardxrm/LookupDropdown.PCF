@@ -8,7 +8,8 @@
     "rebuild": "pcf-scripts rebuild",
     "start": "pcf-scripts start",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "deploy-storybook": "gh-pages -d storybook-static"
   },
   "dependencies": {
     "@fluentui/react": "^8.87.1",
@@ -43,6 +44,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-storybook": "^0.6.10",
+    "gh-pages": "^5.0.0",
     "pcf-scripts": "^1.16.6",
     "pcf-start": "^1.16.6",
     "speed-measure-webpack-plugin": "^1.5.0",
