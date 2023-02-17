@@ -7,6 +7,8 @@
  * https://itmustbecode.com/better-ux-with-a-lookup-dropdown-pcf-control/
  * https://itmustbecode.com/related-record-filtering-with-the-lookup-dropdown-pcf/
  
+ 
+ * 📚[Try Component in Storybook](https://drivardxrm.github.io/LookupDropdown.PCF/)
  * Download latest version here : https://github.com/drivardxrm/LookupDropdown.PCF/releases/latest
 
 #### Features:
