@@ -46,6 +46,7 @@ export const dropdownStyles = (props: IDropdownStyleProps):Partial<IDropdownStyl
     boxSizing: 'border-box',
     height: '33px',
     width: '100%',
+    verticalAlign: 'middle',
     selectors: {
       ':hover': {
         borderColor: 'black',
@@ -73,6 +74,8 @@ export const dropdownStyles = (props: IDropdownStyleProps):Partial<IDropdownStyl
   }],
   dropdownItem: [{
     display: 'inline-flex',
+    height: 'fit-content',
+    marginBottom: '2px',
     selectors: {
       ':hover': {
         color: 'black'
@@ -81,11 +84,16 @@ export const dropdownStyles = (props: IDropdownStyleProps):Partial<IDropdownStyl
   }],
   dropdownItemSelected: [{
     display: 'inline-flex',
+    height: 'fit-content',
     selectors: {
       ':hover': {
         color: 'black'
       }
     }
+  }],
+  dropdownOptionText: [{ 
+    overflow: 'visible', 
+    whiteSpace: 'normal' 
   }],
   caretDown: [{
     color: props.isOpen === true ? colorFocus : 'transparent'
@@ -96,6 +104,22 @@ export const dropdownStyles = (props: IDropdownStyleProps):Partial<IDropdownStyl
   }]
 })
 
-export const dropdownIconOptionStyle = { marginRight: '8px', width: 25, height: 25 }
-export const dropdownIcontitleStyle = { marginRight: '8px', marginTop: '3px', width: 25, height: 25 }
-export const dropdownTextStyle = { display: 'inline-flex' }
+export const dropdownIconOptionStyle = { marginRight: '8px', marginTop: '2px', width: 25, height: 25, overflow: 'inherit' } as React.CSSProperties
+export const dropdownIcontitleStyle = { marginRight: '8px', marginTop: '3px', width: 25, height: 25 } as React.CSSProperties
+export const dropdownTextStyle = { 
+  display: 'inline-flex' 
+} as React.CSSProperties
+
+export const dropdownTitleStyles  = { 
+  display: 'block', 
+  textOverflow: 'ellipsis', 
+  overflow: 'hidden', 
+  whiteSpace: 'nowrap'
+} as React.CSSProperties
+
+export const dropdownTitleSpanStyles  = { 
+ position: 'absolute',
+ //bottom: '2px'
+} as React.CSSProperties
+
+export const dropdownStackItemStyle = { width: '90%' } as React.CSSProperties
