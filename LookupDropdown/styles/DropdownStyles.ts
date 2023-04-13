@@ -74,7 +74,7 @@ export const dropdownStyles = (props: IDropdownStyleProps):Partial<IDropdownStyl
   }],
   dropdownItem: [{
     display: 'inline-flex',
-    height: 'auto',
+    height: 'fit-content',
     marginBottom: '2px',
     selectors: {
       ':hover': {
@@ -84,6 +84,7 @@ export const dropdownStyles = (props: IDropdownStyleProps):Partial<IDropdownStyl
   }],
   dropdownItemSelected: [{
     display: 'inline-flex',
+    height: 'fit-content',
     selectors: {
       ':hover': {
         color: 'black'
