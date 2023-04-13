@@ -7,7 +7,7 @@ import OpenRecordButton from './OpenRecordButton'
 import { Dropdown, IDropdownOption, IDropdown, IDropdownProps } from '@fluentui/react/lib/Dropdown'
 import { ImageIcon } from '@fluentui/react/lib/Icon'
 import { useRecordsAsOptions } from '../hooks/useRecords'
-import { dropdownIconOptionStyle, dropdownIcontitleStyle, dropdownStackItemStyle, dropdownStyles, dropdownTextStyle, dropdownTheme, dropdownTitleStyles } from '../styles/DropdownStyles'
+import { dropdownIconOptionStyle, dropdownIcontitleStyle, dropdownStackItemStyle, dropdownStyles, dropdownTextStyle, dropdownTheme, dropdownTitleSpanStyles, dropdownTitleStyles } from '../styles/DropdownStyles'
 import { useLookupView } from '../hooks/useLookupView'
 export interface ILookupDropdownProps{
   entity: string;
@@ -90,7 +90,7 @@ const LookupDropdown = ():JSX.Element => {
   const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element => {
     const option = options![0]
     return (
-      <div style={dropdownTitleStyles}>
+      <div id='titlediv' style={dropdownTitleStyles}>
         {pcfcontext.showRecordImage && option && option.data && option.data.imagesrc && (
           <ImageIcon
             style={dropdownIcontitleStyle}
@@ -102,7 +102,9 @@ const LookupDropdown = ():JSX.Element => {
           />
         )}
         {option && option.text && (
-          <span>{option.text}</span>
+          
+            <span style={dropdownTitleSpanStyles}>{option.text}</span>
+          
         )}
       </div>
     )

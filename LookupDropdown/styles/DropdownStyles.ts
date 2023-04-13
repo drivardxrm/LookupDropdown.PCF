@@ -89,7 +89,10 @@ export const dropdownStyles = (props: IDropdownStyleProps):Partial<IDropdownStyl
       }
     }
   }],
-  dropdownOptionText: [{ overflow: 'visible', whiteSpace: 'normal' }],
+  dropdownOptionText: [{ 
+    overflow: 'visible', 
+    whiteSpace: 'normal' 
+  }],
   caretDown: [{
     color: props.isOpen === true ? colorFocus : 'transparent'
   }],
@@ -103,5 +106,16 @@ export const dropdownIconOptionStyle = { marginRight: '8px', width: 25, height: 
 export const dropdownIcontitleStyle = { marginRight: '8px', marginTop: '3px', width: 25, height: 25 } as React.CSSProperties
 export const dropdownTextStyle = { display: 'inline-flex' } as React.CSSProperties
 
-export const dropdownTitleStyles  = { display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap'} as React.CSSProperties
+export const dropdownTitleStyles  = { 
+  display: 'block', 
+  textOverflow: 'ellipsis', 
+  overflow: 'hidden', 
+  whiteSpace: 'nowrap'
+} as React.CSSProperties
+
+export const dropdownTitleSpanStyles  = { 
+ position: 'relative',
+ bottom: '5px'
+} as React.CSSProperties
+
 export const dropdownStackItemStyle = { width: '90%' } as React.CSSProperties
