@@ -182,3 +182,12 @@ Selected.args = {
   showOpenRecordButton: true,
   showRecordImage: true
 }
+
+export const LongText = Template.bind({}) as StoryObj<StoryArgs>
+LongText.args = {
+  
+  customselecttext: 'Custom Select',
+  customtext: '{fullname} - {country} - MVP | and a very long text to test the control',
+  showOpenRecordButton: true,
+  showRecordImage: true
+}

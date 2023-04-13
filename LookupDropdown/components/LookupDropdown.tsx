@@ -7,7 +7,7 @@ import OpenRecordButton from './OpenRecordButton'
 import { Dropdown, IDropdownOption, IDropdown, IDropdownProps } from '@fluentui/react/lib/Dropdown'
 import { ImageIcon } from '@fluentui/react/lib/Icon'
 import { useRecordsAsOptions } from '../hooks/useRecords'
-import { dropdownIconOptionStyle, dropdownIcontitleStyle, dropdownStyles, dropdownTextStyle, dropdownTheme } from '../styles/DropdownStyles'
+import { dropdownIconOptionStyle, dropdownIcontitleStyle, dropdownStackItemStyle, dropdownStyles, dropdownTextStyle, dropdownTheme, dropdownTitleStyles } from '../styles/DropdownStyles'
 import { useLookupView } from '../hooks/useLookupView'
 export interface ILookupDropdownProps{
   entity: string;
@@ -49,6 +49,7 @@ const LookupDropdown = ():JSX.Element => {
   }
 
   // - When value of combobox changes, callback to PCF
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDropdownChanged = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption<any>|undefined, index? : number | undefined) => {
     let lookupvalue
     if (option === undefined || option.key === -1) {
@@ -89,7 +90,7 @@ const LookupDropdown = ():JSX.Element => {
   const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element => {
     const option = options![0]
     return (
-      <div style={dropdownTextStyle}>
+      <div style={dropdownTitleStyles}>
         {pcfcontext.showRecordImage && option && option.data && option.data.imagesrc && (
           <ImageIcon
             style={dropdownIcontitleStyle}
@@ -116,8 +117,8 @@ const LookupDropdown = ():JSX.Element => {
     return (
       <>
         {options && (
-          <Stack horizontal>
-            <Stack.Item grow={9}>
+          <Stack horizontal verticalAlign="center" wrap>
+            <Stack.Item grow={9} style={dropdownStackItemStyle}>
               <Dropdown
                 placeholder={placeholder}
                 componentRef={dropdownRef}
