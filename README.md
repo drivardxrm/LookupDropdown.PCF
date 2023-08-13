@@ -1,13 +1,14 @@
 # LookupDropdown.PCF 
 ![GitHub all releases](https://img.shields.io/github/downloads/drivardxrm/LookupDropdown.PCF/total)
-![Known Vulnerabilities](https://snyk.io/test/github/drivardxrm/LookupDropdown.PCF/badge.svg)
-
 
  PowerApps Component framework (PCF) Control that renders a lookup field as a dropdown
  
- * **UPDATE 2022-01-20 : PLEASE USE v1.0.0.2 or above, a 🐛 was found in earlier versions**
+**IMPORTANT : The control needs to be configured using the Classic UI see issue [#29](https://github.com/drivardxrm/LookupDropdown.PCF/issues/29) for more info**
+
+**UPDATE 2022-01-20 : PLEASE USE v1.0.0.2 or above, a 🐛 was found in earlier versions**
+
  
- * Blog posts : 
+**Blog posts :** 
  * https://itmustbecode.com/better-ux-with-a-lookup-dropdown-pcf-control/
  * https://itmustbecode.com/related-record-filtering-with-the-lookup-dropdown-pcf/
  
