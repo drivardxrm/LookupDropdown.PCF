@@ -1,4 +1,4 @@
-import { createTheme } from '@fluentui/react/lib/Styling'
+import { IStyle, createTheme } from '@fluentui/react/lib/Styling'
 import { IDropdownStyles, IDropdownStyleProps } from '@fluentui/react/lib/Dropdown'
 
 export const dropdownTheme = createTheme({
