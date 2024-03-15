@@ -37,6 +37,7 @@ export const renderGenerator = () => {
             lookupfield: LookupPropertyMock,
             showOpenRecordButton: EnumPropertyMock<"false" | "true">,
             showRecordImage: EnumPropertyMock<"false" | "true">,
+            sortByTextValue: EnumPropertyMock<"false" | "true">,
           },
           container
         );

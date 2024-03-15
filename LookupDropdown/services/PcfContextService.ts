@@ -136,7 +136,19 @@ export class PcfContextService {
     const result = await this.context.webAPI
       .retrieveMultipleRecords(entityname, `?fetchXml=${fetchxmlstring}`)
 
-    return result.entities ?? []
+    if (result.entities)
+    {
+      if (this.context.parameters.sortByTextValue.raw === 'true')
+      {
+        return result.entities?.sort((a, b) => {
+          const aText = this.getRecordText(a, primaryname);
+          const bText = this.getRecordText(b, primaryname);
+          return aText.localeCompare(bText);
+        });
+      }
+      return result.entities;
+    }
+    return [];
   }
 
   private getManyToOneLinkEntity (manytoonerelationship:any) :HTMLElement {

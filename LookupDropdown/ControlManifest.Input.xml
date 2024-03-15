@@ -7,13 +7,17 @@
     <property name="customselecttext" display-name-key="Custom Select Text" description-key="(Optional) Custom text for dropdown selector text (default = Select)." of-type="SingleLine.Text" usage="input" />
     <property name="dependentlookupfield" display-name-key="Dependent Lookup Field" description-key="(Optional) Dependent Lookup field. Use when Related Records Filtering is set on the Field Properties." of-type="Lookup.Simple" usage="bound" />
 
-
     <property name="showRecordImage" display-name-key="Show Record Image" description-key="Show the record image beside the text." of-type="Enum" usage="input" required="true">
       <value name="false" display-name-key="false" description-key="False" default="true">false</value>
       <value name="true" display-name-key="true" description-key="True">true</value>     
     </property>
 
     <property name="showOpenRecordButton" display-name-key="Show Open Record Button" description-key="Show a button next to the dropdown to open the selected record form." of-type="Enum" usage="input" required="true">
+      <value name="false" display-name-key="false" description-key="False" default="true">false</value>
+      <value name="true" display-name-key="true" description-key="True">true</value>     
+    </property>
+
+    <property name="sortByTextValue" display-name-key="Sort By Text Value" description-key="Sort the dropdown list by the displayed text value instead of the default lookup view sorting order." of-type="Enum" usage="input" required="true">
       <value name="false" display-name-key="false" description-key="False" default="true">false</value>
       <value name="true" display-name-key="true" description-key="True">true</value>     
     </property>
