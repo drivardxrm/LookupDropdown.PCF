@@ -112,9 +112,9 @@ const LookupDropdown = ():JSX.Element => {
 
   // MAIN RENDERING
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>{pcfcontext.context.resources.getString("Loading...")}</div>
   } if (isError) {
-    return <div>Error fetching data...</div>
+    return <div>{pcfcontext.context.resources.getString("Error fetching data...")}</div>
   } else {
     return (
       <>

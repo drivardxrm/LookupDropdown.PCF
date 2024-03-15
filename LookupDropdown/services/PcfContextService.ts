@@ -48,7 +48,7 @@ export class PcfContextService {
   }
 
   SelectText ():string {
-    return `--${this.context.parameters.customselecttext.raw ?? 'Select'}--`
+    return `--${this.context.parameters.customselecttext.raw ?? this.context.resources.getString("Select")}--`
   }
 
   replaceAll (string:string, search:string, replace:string) {
@@ -61,16 +61,20 @@ export class PcfContextService {
       return record[`${primaryname}`]
     } else {
       // Custom text
-      let customtext = this.context.parameters.customtext.raw
-      this.CustomTextAttributes().forEach(attribute => {
-        // check if there is a formated value for the attribute (ex. Choice, Date, Lookup etc)
-        const formatedValue = record[`${attribute}@OData.Community.Display.V1.FormattedValue`] ??
-                              record[`_${attribute}_value@OData.Community.Display.V1.FormattedValue`] ??
-                              record[`${attribute}`]
-        customtext = this.replaceAll(customtext, `{${attribute}}`, formatedValue ?? '')
-      })
-
-      return customtext
+      let customtext = this.context.parameters.customtext.raw.indexOf("##") > -1 ? this.context.parameters.customtext.raw.split("__").find(langcustomtext => langcustomtext.split("##")[0] === this.context.userSettings.languageId.toString())?.split("##")[1] : this.context.parameters.customtext.raw;
+      if (customtext)
+      {
+        this.CustomTextAttributes().forEach(attribute => {
+          // check if there is a formated value for the attribute (ex. Choice, Date, Lookup etc)
+          const formatedValue = record[`${attribute}@OData.Community.Display.V1.FormattedValue`] ??
+                                record[`_${attribute}_value@OData.Community.Display.V1.FormattedValue`] ??
+                                record[`${attribute}`]
+          customtext = this.replaceAll(customtext!, `{${attribute}}`, formatedValue ?? '')
+        })
+  
+        return customtext
+      }
+      return record[`${primaryname}`]
     }
   }
 
