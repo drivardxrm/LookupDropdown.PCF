@@ -21,6 +21,7 @@ export class PcfContextService {
   dependentValue:ComponentFramework.LookupValue | undefined;
   dependentEntityName:string;
   filterRelationshipName:string;
+  customText: string | null | undefined;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
 
   constructor (props?:IPcfContextServiceProps) {
@@ -37,6 +38,11 @@ export class PcfContextService {
         : undefined
       this.dependentEntityName = (props.context.parameters.lookupfield as any).dependentAttributeType ?? ''
       this.filterRelationshipName = (props.context.parameters.lookupfield as any).filterRelationshipName ?? ''
+      if (this.context.parameters.customtext.raw)
+      {
+        this.customText = this.context.parameters.customtext.raw.indexOf("##") > -1 ? this.context.parameters.customtext.raw.split("__").find(langcustomtext => langcustomtext.split("##")[0] === this.context.userSettings.languageId.toString())?.split("##")[1] : this.context.parameters.customtext.raw;
+      }
+      
       this.onChange = props.onChange
     }
   }
@@ -57,13 +63,11 @@ export class PcfContextService {
 
   getRecordText (record:ComponentFramework.WebApi.Entity, primaryname:string):string {
     // Default = record primaryname
-    if (this.context.parameters.customtext.raw == null) {
+    if (!this.customText) {
       return record[`${primaryname}`]
     } else {
       // Custom text
-      let customtext = this.context.parameters.customtext.raw.indexOf("##") > -1 ? this.context.parameters.customtext.raw.split("__").find(langcustomtext => langcustomtext.split("##")[0] === this.context.userSettings.languageId.toString())?.split("##")[1] : this.context.parameters.customtext.raw;
-      if (customtext)
-      {
+      let customtext = this.customText;
         this.CustomTextAttributes().forEach(attribute => {
           // check if there is a formated value for the attribute (ex. Choice, Date, Lookup etc)
           const formatedValue = record[`${attribute}@OData.Community.Display.V1.FormattedValue`] ??
@@ -73,8 +77,6 @@ export class PcfContextService {
         })
   
         return customtext
-      }
-      return record[`${primaryname}`]
     }
   }
 
