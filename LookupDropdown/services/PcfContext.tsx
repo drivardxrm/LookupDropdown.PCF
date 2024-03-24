@@ -5,7 +5,7 @@ import { PcfContextService } from './PcfContextService'
 interface PcfContextProviderProps {
    pcfcontext:PcfContextService,
    children: ReactNode
-};
+}
 
 export const PcfContextProvider = ({ pcfcontext, children }: PcfContextProviderProps) => {
   return (

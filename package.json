@@ -14,7 +14,7 @@
     "deploy-storybook": "gh-pages -d storybook-static"
   },
   "dependencies": {
-    "@fluentui/react": "^8.87.1",
+    "@fluentui/react": "^8.117.0",
     "@tanstack/react-query": "^4.0.10",
     "@types/node": "^18.6.5",
     "@types/powerapps-component-framework": "^1.3.4",
@@ -42,6 +42,7 @@
     "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
+    "ajv": "^8.12.0",
     "babel-loader": "^8.3.0",
     "browserlist": "^1.0.1",
     "browserslist": "^4.21.5",
@@ -54,6 +55,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-storybook": "^0.6.14",
+    "eslint-plugin-react": "^7.33.2",
     "gh-pages": "^5.0.0",
     "pcf-scripts": "^1.16.6",
     "pcf-start": "^1.16.6",
