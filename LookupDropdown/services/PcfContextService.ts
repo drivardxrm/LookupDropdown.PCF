@@ -21,6 +21,7 @@ export class PcfContextService {
   dependentValue:ComponentFramework.LookupValue | undefined;
   dependentEntityName:string;
   filterRelationshipName:string;
+  customText: string | null | undefined;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
 
   constructor (props?:IPcfContextServiceProps) {
@@ -37,6 +38,11 @@ export class PcfContextService {
         : undefined
       this.dependentEntityName = (props.context.parameters.lookupfield as any).dependentAttributeType ?? ''
       this.filterRelationshipName = (props.context.parameters.lookupfield as any).filterRelationshipName ?? ''
+      if (this.context.parameters.customtext.raw)
+      {
+        this.customText = this.context.parameters.customtext.raw.indexOf("##") > -1 ? this.context.parameters.customtext.raw.split("__").find(langcustomtext => langcustomtext.split("##")[0] === this.context.userSettings.languageId.toString())?.split("##")[1] : this.context.parameters.customtext.raw;
+      }
+      
       this.onChange = props.onChange
     }
   }
@@ -48,7 +54,7 @@ export class PcfContextService {
   }
 
   SelectText ():string {
-    return `--${this.context.parameters.customselecttext.raw ?? 'Select'}--`
+    return `--${this.context.parameters.customselecttext.raw ?? this.context.resources.getString("Select")}--`
   }
 
   replaceAll (string:string, search:string, replace:string) {
@@ -57,20 +63,20 @@ export class PcfContextService {
 
   getRecordText (record:ComponentFramework.WebApi.Entity, primaryname:string):string {
     // Default = record primaryname
-    if (this.context.parameters.customtext.raw == null) {
+    if (!this.customText) {
       return record[`${primaryname}`]
     } else {
       // Custom text
-      let customtext = this.context.parameters.customtext.raw
-      this.CustomTextAttributes().forEach(attribute => {
-        // check if there is a formated value for the attribute (ex. Choice, Date, Lookup etc)
-        const formatedValue = record[`${attribute}@OData.Community.Display.V1.FormattedValue`] ??
-                              record[`_${attribute}_value@OData.Community.Display.V1.FormattedValue`] ??
-                              record[`${attribute}`]
-        customtext = this.replaceAll(customtext, `{${attribute}}`, formatedValue ?? '')
-      })
-
-      return customtext
+      let customtext = this.customText;
+        this.CustomTextAttributes().forEach(attribute => {
+          // check if there is a formated value for the attribute (ex. Choice, Date, Lookup etc)
+          const formatedValue = record[`${attribute}@OData.Community.Display.V1.FormattedValue`] ??
+                                record[`_${attribute}_value@OData.Community.Display.V1.FormattedValue`] ??
+                                record[`${attribute}`]
+          customtext = this.replaceAll(customtext!, `{${attribute}}`, formatedValue ?? '')
+        })
+  
+        return customtext
     }
   }
 
@@ -132,7 +138,19 @@ export class PcfContextService {
     const result = await this.context.webAPI
       .retrieveMultipleRecords(entityname, `?fetchXml=${fetchxmlstring}`)
 
-    return result.entities ?? []
+    if (result.entities)
+    {
+      if (this.context.parameters.sortByTextValue.raw === 'true')
+      {
+        return result.entities?.sort((a, b) => {
+          const aText = this.getRecordText(a, primaryname);
+          const bText = this.getRecordText(b, primaryname);
+          return aText.localeCompare(bText);
+        });
+      }
+      return result.entities;
+    }
+    return [];
   }
 
   private getManyToOneLinkEntity (manytoonerelationship:any) :HTMLElement {
