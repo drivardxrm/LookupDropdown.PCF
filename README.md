@@ -53,6 +53,7 @@ react-query : https://react-query.tanstack.com/
 | dependentlookupfield | OPTIONAL: Dependent Lookup field. Use when Related Records Filtering is set on the Field Properties    | |
 | showRecordImage   | Show the record image beside the text | false  |
 | showOpenRecordButton | Show a button next to the dropdown to open the selected record form.|  false    |
+| sortByTextValue | Sort the dropdown list by the displayed text value instead of the default lookup view sorting order.|  false    |
 
 # Screenshots
 
