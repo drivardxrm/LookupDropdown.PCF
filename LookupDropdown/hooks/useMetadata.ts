@@ -1,16 +1,14 @@
-/* eslint-disable no-undef */
-
 import { useQuery } from '@tanstack/react-query'
 import { usePcfContext } from '../services/PcfContext'
 
 export const useMetadata = (entityname:string) => {
   const pcfcontext = usePcfContext()
 
-  const { data, isLoading, isError } =
+  const { data, status, error, isFetching } =
     useQuery<ComponentFramework.PropertyHelper.EntityMetadata, Error>(
-      ['metadata', entityname, pcfcontext.instanceid],
-      () => pcfcontext.getEntityMetadata(entityname),
       {
+        queryKey: ['metadata', entityname, pcfcontext.instanceid],
+        queryFn: () => pcfcontext.getEntityMetadata(entityname),
         enabled: entityname !== null && entityname !== undefined && entityname !== '',
         staleTime: Infinity
       }
@@ -23,7 +21,8 @@ export const useMetadata = (entityname:string) => {
     primaryimage: data?.PrimaryImageAttribute,
     manytoonerelationships: data?.ManyToOneRelationships,
     onetomanyrelationships: data?.OneToManyRelationships,
-    isLoading,
-    isError
+    status,
+    error,
+    isFetching
   }
 }

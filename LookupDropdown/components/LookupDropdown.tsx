@@ -9,6 +9,7 @@ import { ImageIcon } from '@fluentui/react/lib/Icon'
 import { useRecordsAsOptions } from '../hooks/useRecords'
 import { dropdownIconOptionStyle, dropdownIcontitleStyle, dropdownStackItemStyle, dropdownStyles, dropdownTextStyle, dropdownTheme, dropdownTitleSpanStyles, dropdownTitleStyles } from '../styles/DropdownStyles'
 import { useLookupView } from '../hooks/useLookupView'
+import { stat } from 'fs'
 export interface ILookupDropdownProps{
   entity: string;
 }
@@ -18,15 +19,14 @@ const LookupDropdown = ():JSX.Element => {
   const dropdownRef = useRef<IDropdown>(null)
   const pcfcontext = usePcfContext()
   // Custom Hook based on react-query
-  const { options, isLoading, isError } = useRecordsAsOptions()
+  const { options, status, isFetching, error } = useRecordsAsOptions()
   const { entityname } = useLookupView()
 
   // Clear the value if the selected value is not in the options
   // Only Used when a dependent lookup is changed
   useEffect(
     () => {
-      if (!isLoading &&
-          !isError &&
+      if (status == 'success' &&
            pcfcontext.dependentValue !== undefined && // Only clear if a dependent value is set
            options.length > 1 && // IMPORTANT There is always a blank option
            pcfcontext.selectedValue !== undefined &&
@@ -34,7 +34,7 @@ const LookupDropdown = ():JSX.Element => {
         pcfcontext.onChange(undefined)
       }
     }
-    , [options, isLoading, isError, pcfcontext.selectedValue])
+    , [options, status, pcfcontext.selectedValue])
 
   const placeholder = pcfcontext.selectedValue === undefined || options.some(option => option.key === pcfcontext.selectedValue?.id) ? '---' : `--${pcfcontext.selectedValue?.name}--`
 
@@ -111,9 +111,9 @@ const LookupDropdown = ():JSX.Element => {
   }
 
   // MAIN RENDERING
-  if (isLoading) {
+  if (status === 'pending' || isFetching) {
     return <div>{pcfcontext.context.resources.getString("Loading...")}</div>
-  } if (isError) {
+  } if (status === 'error') {
     return <div>{pcfcontext.context.resources.getString("Error fetching data...")}</div>
   } else {
     return (

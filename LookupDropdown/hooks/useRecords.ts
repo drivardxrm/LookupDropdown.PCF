@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
 import { useQuery } from '@tanstack/react-query'
 
@@ -11,22 +10,24 @@ export const useRecords = () => {
   const { entityname, fetchxml } = useLookupView()
   const { primaryid, primaryname, primaryimage, metadata } = useMetadata(entityname)
 
-  const { data, isLoading, isError } =
+  const { data, status, error, isFetching } =
     useQuery<ComponentFramework.WebApi.Entity[], Error>(
-      ['lookuprecords', pcfcontext.instanceid, pcfcontext.dependentValue?.id],
-      () => pcfcontext.getLookupRecords(entityname, primaryid, primaryname, primaryimage, fetchxml, metadata!),
       {
+        queryKey: ['lookuprecords', pcfcontext.instanceid, pcfcontext.dependentValue?.id],
+        queryFn: () => pcfcontext.getLookupRecords(entityname, primaryid, primaryname, primaryimage, fetchxml, metadata!),
         enabled: !!entityname && !!primaryid && !!fetchxml,
         staleTime: Infinity
       }
     )
 
-  return { records: data, isLoading, isError }
+  return { records: data, status,
+    error,
+    isFetching }
 }
 
 export const useRecordsAsOptions = () => {
   const pcfcontext = usePcfContext()
-  const { records, isLoading, isError } = useRecords()
+  const { records, status, error, isFetching } = useRecords()
   const { entityname } = useLookupView()
   const { primaryid, primaryname, primaryimage } = useMetadata(entityname)
 
@@ -46,5 +47,36 @@ export const useRecordsAsOptions = () => {
       }))
     : [{ key: -1, text: pcfcontext.SelectText() }]
 
-  return { options, isLoading, isError }
+  return { options, status, error, isFetching }
 }
+
+
+export interface IRecord {
+  id: string;
+  primaryname?: string;
+  displaytext: string;
+  imagesrc?: string;
+}
+
+export const useTagPickerOptions = () => {
+  const pcfcontext = usePcfContext()
+  const { records, status, error, isFetching } = useRecords()
+  const { entityname } = useLookupView()
+  const { primaryid, primaryname, primaryimage } = useMetadata(entityname)
+
+  const options:IRecord[] = records?.map(e => {
+        const imagesrc = e?.[primaryimage] == null
+          ? undefined
+          : `data:image/jpeg;base64,${e?.[primaryimage]}`
+        return {
+          id: e[`${primaryid}`],
+          primaryname: e[`${primaryname}`],
+          displaytext: pcfcontext.getRecordText(e, primaryname),
+          imagesrc: imagesrc
+        }
+      }) ?? []
+
+  return { options, status, error, isFetching }
+}
+
+

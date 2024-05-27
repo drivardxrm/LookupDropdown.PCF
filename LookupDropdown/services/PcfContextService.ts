@@ -6,16 +6,18 @@ import { IInputs } from '../generated/ManifestTypes'
 
 export interface IPcfContextServiceProps{
   context: ComponentFramework.Context<IInputs>;
-  instanceid: number;
+  instanceid: string;
+  isDarkMode: boolean;
   onChange: (selectedOption?: ComponentFramework.LookupValue[] | undefined) => void;
 }
 
 export class PcfContextService {
-  instanceid:number;
+  instanceid:string;
   context: ComponentFramework.Context<IInputs>;
   viewid:string;
   isReadOnly:boolean;
   isMasked:boolean;
+  isDarkMode:boolean;
   showRecordImage:boolean;
   selectedValue:ComponentFramework.LookupValue | undefined;
   dependentValue:ComponentFramework.LookupValue | undefined;
@@ -27,6 +29,7 @@ export class PcfContextService {
   constructor (props?:IPcfContextServiceProps) {
     if (props) {
       this.instanceid = props.instanceid
+      this.isDarkMode = props.isDarkMode
       this.context = props.context
       this.viewid = props.context.parameters.lookupfield.getViewId()
       this.isReadOnly = props.context.mode.isControlDisabled || !props.context.parameters.lookupfield.security?.editable

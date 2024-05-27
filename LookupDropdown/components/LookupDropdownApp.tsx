@@ -4,6 +4,8 @@ import { PcfContextProvider } from '../services/PcfContext'
 import { IPcfContextServiceProps, PcfContextService } from '../services/PcfContextService'
 import LookupDropdown from './LookupDropdown'
 import MaskedInput from './MaskedInput'
+import { FluentProvider, IdPrefixProvider, webDarkTheme, webLightTheme } from '@fluentui/react-components'
+import LookupDropdown2 from './LookupDropdown2'
 
 // declare outside of FC element so it doesnt gets evaluated at each rerenders
 const queryClient = new QueryClient({
@@ -23,12 +25,16 @@ const LookupDropdownApp = (props:IPcfContextServiceProps): JSX.Element => {
   const pcfcontextservice = new PcfContextService(props)
 
   return (
-    <QueryClientProvider client={queryClient} contextSharing={false}>
+    <QueryClientProvider client={queryClient}>
       <PcfContextProvider pcfcontext={pcfcontextservice}>
-      { pcfcontextservice.isMasked
-        ? <MaskedInput/>
-        : <LookupDropdown />
-      }
+        <IdPrefixProvider value={`lookupdropdown-${props.instanceid}-`}>
+          <FluentProvider theme={props.isDarkMode ? webDarkTheme : webLightTheme}>
+            { pcfcontextservice.isMasked
+              ? <MaskedInput/>
+              : <LookupDropdown2 />
+            }
+          </FluentProvider>
+        </IdPrefixProvider>
       </PcfContextProvider>
     </QueryClientProvider>
   )

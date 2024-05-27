@@ -9,6 +9,7 @@ import LookupDropdownApp from './components/LookupDropdownApp'
 import { IPcfContextServiceProps } from './services/PcfContextService'
 import { initializeIcons } from '@fluentui/react/lib/Icons'
 import { createElement } from 'react'
+import { v4 as uuidv4 } from 'uuid';
 
 initializeIcons(undefined, { disableWarnings: true })
 
@@ -41,7 +42,8 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 
 	  this._appprops = {
 	    context: context,
-	    instanceid: Math.random(),
+	    instanceid: uuidv4(),
+		isDarkMode: context.fluentDesignLanguage?.isDarkTheme ?? false,
 	    onChange: this.onChange
 	  }
 	}
