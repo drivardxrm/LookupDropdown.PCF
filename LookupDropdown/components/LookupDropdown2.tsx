@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import * as React from 'react'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { Stack } from '@fluentui/react/lib/Stack'
 import { usePcfContext } from '../services/PcfContext'
 import OpenRecordButton from './OpenRecordButton'
@@ -10,7 +10,7 @@ import { useRecordsAsOptions, useTagPickerOptions } from '../hooks/useRecords'
 import { dropdownIconOptionStyle, dropdownIcontitleStyle, dropdownStackItemStyle, dropdownStyles, dropdownTextStyle, dropdownTheme, dropdownTitleSpanStyles, dropdownTitleStyles } from '../styles/DropdownStyles'
 import { useLookupView } from '../hooks/useLookupView'
 import { useStyles } from '../styles/Styles'
-import { Avatar, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, useTagPickerFilter } from '@fluentui/react-components'
+import { Image, Avatar, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, useTagPickerFilter } from '@fluentui/react-components'
 export interface ILookupDropdownProps{
   entity: string;
 }
@@ -23,6 +23,10 @@ const LookupDropdown2 = ():JSX.Element => {
   // Custom Hook based on react-query
   const { options, status, isFetching} = useTagPickerOptions()
   const { entityname } = useLookupView()
+  const [query, setQuery] = useState<string>("");
+  const [selectedOption, setSelectedOption] = useState<
+    string | undefined
+  >();
 
   // Clear the value if the selected value is not in the options
   // Only Used when a dependent lookup is changed
@@ -38,48 +42,67 @@ const LookupDropdown2 = ():JSX.Element => {
     }
     , [options, status, pcfcontext.selectedValue])
 
-  const placeholder = pcfcontext.selectedValue === undefined || options.some(option => option.id === pcfcontext.selectedValue?.id) ? '---' : `--${pcfcontext.selectedValue?.name}--`
+  //const placeholder = pcfcontext.selectedValue === undefined || options.some(option => option.id === pcfcontext.selectedValue?.id) ? '---' : ''
 
-  // EVENTS
-  // eslint-disable-next-line no-undef
-  // const onRenderPlaceholder = (props: IDropdownProps|undefined): JSX.Element => {
-  //   return (
-  //     <div style={dropdownTextStyle}>
-  //         <em>{props?.placeholder}</em>
-  //     </div>
-  //   )
-  // }
+  const placeholder = useMemo(
+    () => selectedOption === undefined ? '---' : '',
+    [selectedOption]
+  );
 
-  // - When value of combobox changes, callback to PCF
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const onDropdownChanged = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption<any>|undefined, index? : number | undefined) => {
-  //   let lookupvalue
-  //   if (option === undefined || option.key === -1) {
-  //     lookupvalue = undefined
-  //   } else {
-  //     lookupvalue = [{
-  //       id: option.key.toString(),
-  //       name: option.data.recordname,
-  //       entityType: entityname
-  //     }]
-  //   }
 
-  //   pcfcontext.onChange(lookupvalue)
-  // }
 
   
 
-  const [query, setQuery] = React.useState<string>("");
-  const [selectedOption, setSelectedOption] = React.useState<
-    string | undefined
-  >();
-  const selectedOptions = React.useMemo(
+  
+  const selectedOptions = useMemo(
     () => (selectedOption ? [selectedOption] : []),
     [selectedOption]
   );
   const onOptionSelect: TagPickerProps["onOptionSelect"] = (e, data) => {
+    if (data.value === "no-matches") {
+      return;
+    }
     setSelectedOption(selectedOption === data.value ? undefined : data.value);
+    if(data.value === undefined){
+      pcfcontext.onChange(undefined)
+    }else if(data.value !== undefined && data.value !== pcfcontext.selectedValue?.id){
+      pcfcontext.onChange([{id: data.value, name: options.find((option) => option.id === data.value)?.primaryname, entityType: entityname}])
+    }
+    setQuery("");
   };
+
+  const children = useTagPickerFilter({
+    query,
+    options: options.map((option) => option.id),
+    noOptionsElement: (
+      <TagPickerOption value="no-matches">
+        We couldn't find any matches
+      </TagPickerOption>
+    ),
+    renderOption: (optionidToRender) => (
+      <TagPickerOption
+        //secondaryContent="Microsoft FTE"
+        media={
+            <Image
+                alt={options.find((option) => option.id === optionidToRender)?.displaytext}
+                key={options.find((option) => option.id === optionidToRender)?.id}
+                shape="square"
+                src={options.find((option) => option.id === optionidToRender)?.imagesrc}
+                height={25}
+                width={25}
+            />
+        }
+        value={optionidToRender}
+        key={optionidToRender}
+      >
+        {options.find((option) => option.id === optionidToRender)?.displaytext}
+      </TagPickerOption>
+    ),
+
+    filter: (option) =>
+      !selectedOptions.includes(option) &&
+      (options.find((o) => o.id === option)?.displaytext.toLowerCase().includes(query.toLowerCase()) ?? false)
+  });
 
   
 
@@ -93,49 +116,47 @@ const LookupDropdown2 = ():JSX.Element => {
       <>
         {options && (
           <TagPicker
-          onOptionSelect={onOptionSelect}
-          selectedOptions={selectedOptions}
-        >
-          <TagPickerControl>
-            {selectedOption && (
-              <TagPickerGroup>
-                <Tag
-                  key={selectedOption}
-                  shape="rounded"
-                  media={
-                    <Avatar aria-hidden name={selectedOption} color="colorful" />
-                  }
-                  value={selectedOption}
-                >
-                  {selectedOption}
-                </Tag>
-              </TagPickerGroup>
-            )}
-  
-            <TagPickerInput aria-label="Select Employees" />
-          </TagPickerControl>
-          <TagPickerList>
-            {options
-              .filter((option) => selectedOption !== option.id)
-              .map((option) => (
-                <TagPickerOption
-                  secondaryContent="Microsoft FTE"
-                  media={
-                    <Avatar
-                      shape="square"
-                      aria-hidden
-                      name={option.displaytext}
-                      color="colorful"
-                    />
-                  }
-                  value={option.id}
-                  key={option.id}
-                >
-                  {option.displaytext}
-                </TagPickerOption>
-              ))}
-          </TagPickerList>
-        </TagPicker>
+            //size={'large'}
+            onOptionSelect={onOptionSelect}
+            selectedOptions={selectedOptions}
+            appearance={'filled-darker'}
+          >
+            <TagPickerControl>
+              {selectedOption && (
+                <TagPickerGroup>
+                  <Tag
+                    key={selectedOption}
+                    shape="rounded"
+                    media={
+                    
+                        <Image
+                            alt={options.find((option) => option.id === selectedOption)?.displaytext}
+                            key={options.find((option) => option.id === selectedOption)?.id}
+                            shape="square"
+                            src={options.find((option) => option.id === selectedOption)?.imagesrc}
+                            height={20}
+                            width={20}
+                        />
+                    
+                    }
+                    value={selectedOption}
+                  >
+                    {options.find((option) => option.id === selectedOption)?.displaytext}
+                  </Tag>
+                </TagPickerGroup>
+              )}
+    
+              <TagPickerInput 
+                aria-label={pcfcontext.SelectText()}
+                placeholder={placeholder}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)} 
+              />
+            </TagPickerControl>
+            <TagPickerList>
+              {children}
+            </TagPickerList>
+          </TagPicker>
         )}
       </>
     )
