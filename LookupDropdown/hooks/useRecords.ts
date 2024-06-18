@@ -64,7 +64,7 @@ export const useTagPickerOptions = () => {
   const { entityname } = useLookupView()
   const { primaryid, primaryname, primaryimage } = useMetadata(entityname)
 
-  const options:IRecord[] = records?.map(e => {
+  const options:IRecord[] = records ? [{ id: '-1', displaytext: pcfcontext.SelectText() }].concat(records?.map(e => {
         const imagesrc = e?.[primaryimage] == null
           ? undefined
           : `data:image/jpeg;base64,${e?.[primaryimage]}`
@@ -74,7 +74,7 @@ export const useTagPickerOptions = () => {
           displaytext: pcfcontext.getRecordText(e, primaryname),
           imagesrc: imagesrc
         }
-      }) ?? []
+      })) : [{ id: '-1', displaytext: pcfcontext.SelectText() }]
 
   return { options, status, error, isFetching }
 }

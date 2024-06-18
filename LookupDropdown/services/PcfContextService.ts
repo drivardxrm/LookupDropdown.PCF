@@ -19,6 +19,7 @@ export class PcfContextService {
   isMasked:boolean;
   isDarkMode:boolean;
   showRecordImage:boolean;
+  openRecordEnabled:boolean;
   selectedValue:ComponentFramework.LookupValue | undefined;
   dependentValue:ComponentFramework.LookupValue | undefined;
   dependentEntityName:string;
@@ -35,6 +36,7 @@ export class PcfContextService {
       this.isReadOnly = props.context.mode.isControlDisabled || !props.context.parameters.lookupfield.security?.editable
       this.isMasked = !props.context.parameters.lookupfield.security?.readable
       this.showRecordImage = props.context.parameters.showRecordImage.raw === 'true'
+      this.openRecordEnabled = props.context.parameters.showOpenRecordButton.raw === 'true'
       this.selectedValue = props.context.parameters.lookupfield.raw[0] ?? undefined
       this.dependentValue = props.context.parameters.dependentlookupfield?.raw !== null
         ? props.context.parameters.dependentlookupfield?.raw[0]

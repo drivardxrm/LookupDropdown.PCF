@@ -97,6 +97,10 @@ export const useStyles = makeStyles({
   //   textAlign: "center",
   //   transform: "translate(0, 25%)",
   // },
+  tagPickerControl: {
+    paddingLeft: '3px',
+    height: '32px'
+  },
   tagPickerGroup: {
     padding: '0 0 0 0'
   },
@@ -109,11 +113,21 @@ export const useStyles = makeStyles({
   tagPickerInput: {
     padding: '0 0 0 0'
   },
-  expandIconVisible: {
+  elementVisible: {
     visibility: 'visible'
   },
-  expandIconHidden: {
+  elementHidden: {
     visibility: 'hidden'
   },
   icon12: { fontSize: "12px" },
+  // tagHover: {
+  //   backgroundColor: tokens.colorBrandBackground2Hover,
+  // },
+  noborder: {
+    border: 'none'
+  },
+  tagpicker: {
+    height: '32px',
+  },
+  
 });

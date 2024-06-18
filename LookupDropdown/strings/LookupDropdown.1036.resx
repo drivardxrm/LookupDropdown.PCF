@@ -67,4 +67,7 @@
   <data name="Error fetching data..." xml:space="preserve">
     <value>Erreur lors de l'obtention des données...</value> 
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Effacer</value> 
+  </data>
 </root>

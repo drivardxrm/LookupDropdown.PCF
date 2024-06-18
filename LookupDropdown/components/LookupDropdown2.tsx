@@ -2,11 +2,11 @@ import * as React from 'react'
 import { useEffect, useState, useMemo } from 'react'
 import { usePcfContext } from '../services/PcfContext'
 import { useLookupView } from '../hooks/useLookupView'
-import { Image, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, makeStyles, mergeClasses, useTagPickerFilter } from '@fluentui/react-components'
+import { Button, Image, Link, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, Tooltip, makeStyles, mergeClasses, useTagPickerFilter } from '@fluentui/react-components'
 import { useTagPickerOptions } from '../hooks/useRecords'
 import { DismissFilled, ChevronDown20Regular } from '@fluentui/react-icons';
 import { useStyles } from '../styles/Styles'
-//import { useStyles } from '../styles/Styles'
+
 
 
 export interface ILookupDropdownProps{
@@ -27,6 +27,7 @@ const LookupDropdown2 = ():JSX.Element => {
   const [isFocused, setIsFocused] = useState(false);
   const [isInputFocused, setInputFocused] = useState(false);
   const styles = useStyles()
+
 
   // Clear the value if the selected value is not in the options
   // Only Used when a dependent lookup is changed
@@ -80,7 +81,7 @@ const LookupDropdown2 = ():JSX.Element => {
 
   const handleBlur = () => {
     setQuery('')
-    setInputFocused(false);
+    setInputFocused(false)
   };
 
   const handleOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -88,15 +89,19 @@ const LookupDropdown2 = ():JSX.Element => {
     setQuery(e.target.value)    
   };
 
+  const handleClear: React.MouseEventHandler = (event) => {
+    setSelectedOption(undefined)
+  };
+
 
   const onOptionSelect: TagPickerProps["onOptionSelect"] = (e, data) => {
     if (data.value === 'no-matches') {
-      setQuery('');
-      setInputFocused(false);
+      setQuery('')
+      setInputFocused(false)
       return;
     }
-    setSelectedOption(selectedOption === data.value ? undefined : data.value);
-    if(data.value === undefined){
+    //setSelectedOption(selectedOption === data.value ? undefined : data.value);
+    if(data.value === undefined || data.value === '-1'){
       setSelectedOption(undefined)
       //pcfcontext.onChange(undefined)
     }else if(data.value !== undefined && data.value !== pcfcontext.selectedValue?.id){
@@ -125,7 +130,7 @@ const LookupDropdown2 = ():JSX.Element => {
                 key={options.find((option) => option.id === optionidToRender)?.id}
                 shape="square"
                 src={options.find((option) => option.id === optionidToRender)?.imagesrc}
-                height={25}
+                height={24}
                 //width={25}
             />
         }
@@ -150,7 +155,7 @@ const LookupDropdown2 = ():JSX.Element => {
     return <div>{pcfcontext.context.resources.getString("Error fetching data...")}</div>
   } else {
     return (
-      <>
+      <div className={styles.tagpicker}>
         {options && (
           <TagPicker
             //size={'large'}
@@ -160,9 +165,26 @@ const LookupDropdown2 = ():JSX.Element => {
             disabled={pcfcontext.isReadOnly}
           >
             <TagPickerControl 
-                onMouseEnter={()=>{setIsFocused(true)}} 
-                onMouseLeave={()=>{setIsFocused(false)}}
-                expandIcon={<ChevronDown20Regular className={isFocused ? styles.expandIconVisible : styles.expandIconHidden}/>}>
+              className={styles.tagPickerControl}
+              onMouseEnter={()=>{setIsFocused(true)}} 
+              onMouseLeave={()=>{setIsFocused(false)}}
+              expandIcon={<ChevronDown20Regular className={isFocused ? styles.elementVisible : styles.elementHidden}/>}
+              secondaryAction={
+                selectedOption && !pcfcontext.isReadOnly  ?
+                 
+                    <Button
+                      className={isFocused ? styles.elementVisible : styles.elementHidden}
+                      appearance="transparent"
+                      size="small"
+                      shape="rounded"
+                      onClick={handleClear}
+                    >
+                      {pcfcontext.context.resources.getString("Clear")}
+                    </Button>
+                 :
+                 null 
+              }
+            >
               {selectedOption && (
                 <TagPickerGroup 
                   className={mergeClasses(
@@ -171,9 +193,10 @@ const LookupDropdown2 = ():JSX.Element => {
                   }>
                   <Tag
                     key={selectedOption}
+                    className={styles.noborder}
                     shape={'rounded'}
                     size={'medium'}
-                    appearance={'brand'}
+                    appearance={'outline'}
                     media={
                       options.find((option) => option.id === selectedOption)?.imagesrc &&
                         <Image
@@ -181,16 +204,25 @@ const LookupDropdown2 = ():JSX.Element => {
                             key={options.find((option) => option.id === selectedOption)?.id}
                             shape="square"
                             src={options.find((option) => option.id === selectedOption)?.imagesrc}
-                            height={20}
+                            height={24}
                             //width={20}
                         />
                     
                     }
                     value={selectedOption}
-                    dismissIcon = {pcfcontext.isReadOnly ? undefined : <DismissFilled className={styles.icon12}/>}
-                    dismissible = {pcfcontext.isReadOnly ? false : true}
+                    dismissible = {false}
+                    // onMouseEnter={()=>{setIsTagHover(true)}} 
+                    // onMouseLeave={()=>{setIsTagHover(false)}}
                   >
-                    {options.find((option) => option.id === selectedOption)?.displaytext}
+                    {pcfcontext.openRecordEnabled ? 
+                      <Link 
+                        onClick={() => pcfcontext.openRecord(entityname)}>
+                          {options.find((option) => option.id === selectedOption)?.displaytext}
+                      </Link>
+                      :
+                      options.find((option) => option.id === selectedOption)?.displaytext
+                    }
+                    {}
                   </Tag>
                 </TagPickerGroup>
               )}
@@ -210,7 +242,7 @@ const LookupDropdown2 = ():JSX.Element => {
             </TagPickerList>
           </TagPicker>
         )}
-      </>
+      </div>
     )
   }
 }
