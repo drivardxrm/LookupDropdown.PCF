@@ -1,21 +1,13 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable no-useless-constructor */
-/* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable no-tabs */
-/* eslint-disable no-undef */
 import { IInputs, IOutputs } from './generated/ManifestTypes'
 import { createRoot, Root } from 'react-dom/client'
 import LookupDropdownApp from './components/LookupDropdownApp'
 import { IPcfContextServiceProps } from './services/PcfContextService'
-import { initializeIcons } from '@fluentui/react/lib/Icons'
 import { createElement } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
-initializeIcons(undefined, { disableWarnings: true })
 
 export class LookupDropdown implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 	private _notifyOutputChanged:() => void;
-	// private _container: HTMLDivElement;
 	private _selectedValue: ComponentFramework.LookupValue[] | undefined;
 	private _appprops:IPcfContextServiceProps;
 	private _root: Root;
@@ -36,16 +28,16 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	 * @param container If a control is marked control-type='standard', it will receive an empty div element within which it can render its content.
 	 */
 	public init (context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void {
-	  // Add control initialization code
-	  this._notifyOutputChanged = notifyOutputChanged
-	  this._root = createRoot(container!)
+		// Add control initialization code
+		this._notifyOutputChanged = notifyOutputChanged
+		this._root = createRoot(container!)
 
-	  this._appprops = {
-	    context: context,
-	    instanceid: uuidv4(),
-		isDarkMode: context.fluentDesignLanguage?.isDarkTheme ?? false,
-	    onChange: this.onChange
-	  }
+		this._appprops = {
+			context: context,
+			instanceid: uuidv4(),
+			isDarkMode: context.fluentDesignLanguage?.isDarkTheme ?? false,
+			onChange: this.onChange
+		}
 	}
 
 	/**
@@ -53,14 +45,14 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	 * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
 	 */
 	public updateView (context: ComponentFramework.Context<IInputs>): void {
-	  this._appprops.context = context
-	  // RENDER React Component
-	  this._root.render(createElement(LookupDropdownApp, this._appprops))
+		this._appprops.context = context
+		// RENDER React Component
+		this._root.render(createElement(LookupDropdownApp, this._appprops))
 	}
 
 	onChange = (newValue: ComponentFramework.LookupValue[] | undefined): void => {
-	  this._selectedValue = newValue
-	  this._notifyOutputChanged()
+		this._selectedValue = newValue
+		this._notifyOutputChanged()
 	};
 
 	/**
@@ -68,9 +60,9 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	 * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as “bound” or “output”
 	 */
 	public getOutputs (): IOutputs {
-	  return {
-		  lookupfield: this._selectedValue
-	  }
+		return {
+			lookupfield: this._selectedValue
+		}
 	}
 
 	/**
@@ -78,7 +70,7 @@ export class LookupDropdown implements ComponentFramework.StandardControl<IInput
 	 * i.e. cancelling any pending remote calls, removing listeners, etc.
 	 */
 	public destroy (): void {
-	  // Add code to cleanup control if necessary
-	  this._root.unmount()
+		// Add code to cleanup control if necessary
+		this._root.unmount()
 	}
 }

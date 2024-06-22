@@ -1,7 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable no-tabs */
-/* eslint-disable no-undef */
-
 import { IInputs } from '../generated/ManifestTypes'
 
 export interface IPcfContextServiceProps{

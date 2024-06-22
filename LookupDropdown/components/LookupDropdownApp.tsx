@@ -1,11 +1,8 @@
-/* eslint-disable no-use-before-define */
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PcfContextProvider } from '../services/PcfContext'
 import { IPcfContextServiceProps, PcfContextService } from '../services/PcfContextService'
-import LookupDropdown from './LookupDropdown'
-import MaskedInput from './MaskedInput'
 import { FluentProvider, IdPrefixProvider, webDarkTheme, webLightTheme } from '@fluentui/react-components'
-import LookupDropdown2 from './LookupDropdown2'
+import LookupDropdown from './LookupDropdown'
 
 // declare outside of FC element so it doesnt gets evaluated at each rerenders
 const queryClient = new QueryClient({
@@ -29,10 +26,7 @@ const LookupDropdownApp = (props:IPcfContextServiceProps): JSX.Element => {
       <PcfContextProvider pcfcontext={pcfcontextservice}>
         <IdPrefixProvider value={`lookupdropdown-${props.instanceid}-`}>
           <FluentProvider theme={props.isDarkMode ? webDarkTheme : webLightTheme}>
-            { pcfcontextservice.isMasked
-              ? <MaskedInput/>
-              : <LookupDropdown2 />
-            }
+            <LookupDropdown />
           </FluentProvider>
         </IdPrefixProvider>
       </PcfContextProvider>
