@@ -199,6 +199,7 @@ const LookupDropdown = ():JSX.Element => {
                     
                     }
                     value={selectedOption}
+                    title={options.find((option) => option.id === selectedOption)?.displaytext}
                     dismissible = {false}
                     primaryText={{className: styles.tagOverflow }}
                   >
