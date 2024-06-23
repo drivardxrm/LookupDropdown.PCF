@@ -183,7 +183,7 @@ const LookupDropdown = ():JSX.Element => {
                   }>
                   <Tag
                     key={selectedOption}
-                    className={styles.noborder}
+                    className={styles.tag}
                     shape={'rounded'}
                     size={'medium'}
                     appearance={'outline'}
@@ -200,9 +200,10 @@ const LookupDropdown = ():JSX.Element => {
                     }
                     value={selectedOption}
                     dismissible = {false}
+                    primaryText={{className: styles.tagOverflow }}
                   >
                     {pcfcontext.openRecordEnabled ? 
-                      <Link 
+                      <Link className={styles.tagOverflowLink}
                         onClick={() => pcfcontext.openRecord(entityname)}>
                           {options.find((option) => option.id === selectedOption)?.displaytext}
                       </Link>

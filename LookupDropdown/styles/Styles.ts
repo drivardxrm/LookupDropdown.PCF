@@ -28,11 +28,19 @@ export const useStyles = makeStyles({
   tagSelected: {
      backgroundColor: tokens.colorNeutralBackground1Pressed,
   },
-  noborder: {
-    border: 'none'
-  },
   tagpicker: {
     height: '32px',
   },
-  
+  tag: {
+    border: 'none'
+  },
+  tagOverflow: {
+    whiteSpace: 'nowrap', /* Prevents the text from wrapping to the next line */
+    overflow: 'hidden', /* Hides the overflow text */
+    textOverflow: 'ellipsis', /* Adds an ellipsis to indicate text cut off */
+  },
+  tagOverflowLink: {
+    maxWidth: '100%',
+    display: 'inline-block',
+  },
 });
