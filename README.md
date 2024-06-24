@@ -34,8 +34,9 @@
 
 * Support for Related Record Filtering (cascading)
 
+![LookupDropdownFiltering2](https://github.com/drivardxrm/LookupDropdown.PCF/assets/38399134/4294c1be-5412-455a-876b-803e95a48b05)
 
-![lookupdropdown-dependant2](https://user-images.githubusercontent.com/38399134/153111779-cceb0486-65f3-45b8-a12a-6bc5414b9d21.gif)
+
 
 
 
