@@ -5,7 +5,7 @@
  
 **IMPORTANT : The control needs to be configured using the Classic UI see issue [#29](https://github.com/drivardxrm/LookupDropdown.PCF/issues/29) for more info**
 
-**UPDATE 2022-01-20 : PLEASE USE v1.0.0.2 or above, a 🐛 was found in earlier versions**
+**IMPORTANT** : since v2.0.0.0 the control as been refactored to use FluentUI v9 to blend with Model-driven apps [new Look](https://learn.microsoft.com/en-us/power-apps/user/modern-fluent-design?WT.mc_id=DX-MVP-5004959) 
 
  
 **Blog posts :** 
@@ -29,8 +29,8 @@
 
 ![image](https://user-images.githubusercontent.com/38399134/147574893-f2f5b658-6400-4e58-a854-7160428fe8dd.png)
 
+![image](https://github.com/drivardxrm/LookupDropdown.PCF/assets/38399134/23f19a2d-5b04-4ea9-be41-01937e87e7f7)
 
-![image](https://user-images.githubusercontent.com/38399134/147574921-388d1e41-3873-4a03-aa8d-9e64a103621f.png)
 
 * Support for Related Record Filtering (cascading)
 
@@ -40,9 +40,10 @@
 
 
 # Dependencies
-FluentUI : https://github.com/microsoft/fluentui
+FluentUI V9: [https://github.com/microsoft/fluentui](https://react.fluentui.dev/?path=/docs/concepts-introduction--page)
 
-react-query : https://react-query.tanstack.com/
+tanstack-query : [https://react-query.tanstack.com/
+](https://tanstack.com/query/latest)
 
 # Parameters
 | Parameter         | Description                                                                                  | Default     |
