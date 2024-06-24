@@ -77,6 +77,8 @@ const LookupDropdown = ():JSX.Element => {
     setInputFocused(false)
   };
 
+
+
   const handleOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setInputFocused(e.target.value != ''); // if there is a value in the input, set to true (will hide the selected tag)
     setQuery(e.target.value)    
@@ -141,9 +143,9 @@ const LookupDropdown = ():JSX.Element => {
 
   // MAIN RENDERING
   if (status === 'pending' || isFetching) {
-    return <Spinner appearance="primary" label={pcfcontext.context.resources.getString("Loading...")} />
+    return <Spinner size='tiny' appearance='primary' label={pcfcontext.context.resources.getString('Loading...') || 'Loading...'} />
   } if (status === 'error') {
-    return <div>{pcfcontext.context.resources.getString("Error fetching data...")}</div>
+    return <div>{pcfcontext.context.resources.getString('Error fetching data...') || 'Error fetching data...'}</div>
   } else {
     return (
       <div className={styles.tagpicker}>
@@ -163,13 +165,16 @@ const LookupDropdown = ():JSX.Element => {
                 selectedOption && !pcfcontext.isReadOnly && !pcfcontext.isMasked  ?
                  
                     <Button
-                      className={isFocused ? styles.elementVisible : styles.elementHidden}
+                      className={mergeClasses(
+                        styles.clearButton, 
+                        isFocused ? styles.elementVisible : styles.elementHidden)
+                      }
                       appearance="transparent"
                       size="small"
                       shape="rounded"
                       onClick={handleClear}
                     >
-                      {pcfcontext.context.resources.getString("Clear")}
+                      {pcfcontext.context.resources.getString('Clear') || 'Clear'}
                     </Button>
                  :
                  null 
@@ -223,6 +228,7 @@ const LookupDropdown = ():JSX.Element => {
                 value={query}
                 onChange={handleOnChange} 
                 onBlur={handleBlur}
+                clearable={true}
               />
             </TagPickerControl>
             <TagPickerList>

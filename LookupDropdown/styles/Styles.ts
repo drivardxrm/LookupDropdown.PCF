@@ -3,12 +3,14 @@ import { makeStyles,  tokens } from '@fluentui/react-components';
 export const useStyles = makeStyles({
 
   tagPickerControl: {
+    minWidth: '200px',
     paddingLeft: '3px',
     height: '32px'
   },
   tagPickerGroup: {
-    padding: '0 0 0 0'
+    padding: '0 0 0 0',
   },
+  
   tagPickerGroupVisible: {
     display: 'block'
   },
@@ -16,17 +18,24 @@ export const useStyles = makeStyles({
     display: 'none'
   },
   tagPickerInput: {
-    padding: '0 0 0 0'
+   padding: '0 0 0 0'
   },
+  clearButton: {
+    paddingLeft: '0',
+    paddingRight: '0',
+    minWidth: '10px'
+  },
+  
   elementVisible: {
     visibility: 'visible'
   },
   elementHidden: {
-    visibility: 'hidden'
+    visibility: 'hidden',
+    display: 'none'     // gives back the space
   },
   icon12: { fontSize: "12px" },
   tagSelected: {
-     backgroundColor: tokens.colorNeutralBackground1Pressed,
+     backgroundColor: tokens.colorNeutralBackground1Selected,
   },
   tagpicker: {
     height: '32px',
