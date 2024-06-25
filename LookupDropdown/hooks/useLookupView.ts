@@ -1,16 +1,14 @@
-
 import { useQuery } from '@tanstack/react-query'
 import { usePcfContext } from '../services/PcfContext'
 
 export const useLookupView = () => {
   const pcfcontext = usePcfContext()
 
-  const { data, isLoading, isError } =
-    // eslint-disable-next-line no-undef
+  const { data, status, error, isFetching } =
     useQuery<ComponentFramework.WebApi.Entity, Error>(
-      ['savedquery', pcfcontext.instanceid],
-      () => pcfcontext.getLookupView(),
       {
+        queryKey: ['savedquery', pcfcontext.instanceid],
+        queryFn: () => pcfcontext.getLookupView(),
         staleTime: Infinity
       }
     )
@@ -18,7 +16,6 @@ export const useLookupView = () => {
   return {
     fetchxml: data?.fetchxml,
     entityname: data?.returnedtypecode,
-    isLoading,
-    isError
+    status, error, isFetching
   }
 }

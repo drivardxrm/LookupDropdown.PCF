@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="DR" constructor="LookupDropdown" version="0.0.66" display-name-key="LookupDropdown" description-key="PCF to render a lookup field as a dropdown. (Optional) Include record image, Customize record text, Open record button." control-type="standard" preview-image="img/lookupdropdown.png">
+  <control namespace="DR" constructor="LookupDropdown" version="0.0.103" display-name-key="LookupDropdown" description-key="PCF to render a lookup field as a dropdown. (Optional) Include record image, Customize record text, Open record button." control-type="standard" preview-image="img/lookupdropdown.png">
 
     <property name="lookupfield" display-name-key="Lookup Field" description-key="Lookup field to render as dropdown" of-type="Lookup.Simple" usage="bound" required="true" />
     <property name="customtext" display-name-key="Custom Text" description-key="(Optional) customize display text with any text attributes of the record. put attribute schema names between curly braces {}. Ex. {new_firstname} {new_lastname}. Leave blank to show record primaryname. See documentation for multi-language support." of-type="SingleLine.Text" usage="input" />
@@ -12,7 +12,7 @@
       <value name="true" display-name-key="true" description-key="True">true</value>     
     </property>
 
-    <property name="showOpenRecordButton" display-name-key="Show Open Record Button" description-key="Show a button next to the dropdown to open the selected record form." of-type="Enum" usage="input" required="true">
+    <property name="showOpenRecordButton" display-name-key="Enable Open Record" description-key="Selected dropdown record renders as a link that opens the record form." of-type="Enum" usage="input" required="true">
       <value name="false" display-name-key="false" description-key="False" default="true">false</value>
       <value name="true" display-name-key="true" description-key="True">true</value>     
     </property>

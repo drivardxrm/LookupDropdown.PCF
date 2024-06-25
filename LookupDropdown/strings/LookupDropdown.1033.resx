@@ -67,4 +67,10 @@
   <data name="Error fetching data..." xml:space="preserve">
     <value>Error fetching data...</value> 
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value> 
+  </data>
+  <data name="**no match**" xml:space="preserve">
+    <value>**no match**</value> 
+  </data>
 </root>

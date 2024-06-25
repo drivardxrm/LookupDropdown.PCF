@@ -10,7 +10,7 @@ export default {
       const container = document.createElement("div");
       container.style.margin = "2em";
       container.style.padding = "1em";
-      container.style.maxWidth = "350px";
+      container.style.maxWidth = "200px";
       container.style.border = "dotted 1px";
 
       const storyResult = Story();

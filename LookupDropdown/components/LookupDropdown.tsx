@@ -1,148 +1,242 @@
-/* eslint-disable no-use-before-define */
 import * as React from 'react'
-import { useRef, useEffect } from 'react'
-import { Stack } from '@fluentui/react/lib/Stack'
+import { useEffect, useState, useMemo } from 'react'
 import { usePcfContext } from '../services/PcfContext'
-import OpenRecordButton from './OpenRecordButton'
-import { Dropdown, IDropdownOption, IDropdown, IDropdownProps } from '@fluentui/react/lib/Dropdown'
-import { ImageIcon } from '@fluentui/react/lib/Icon'
-import { useRecordsAsOptions } from '../hooks/useRecords'
-import { dropdownIconOptionStyle, dropdownIcontitleStyle, dropdownStackItemStyle, dropdownStyles, dropdownTextStyle, dropdownTheme, dropdownTitleSpanStyles, dropdownTitleStyles } from '../styles/DropdownStyles'
 import { useLookupView } from '../hooks/useLookupView'
+import { Button, Image, Link, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, mergeClasses, useTagPickerFilter } from '@fluentui/react-components'
+import { useTagPickerOptions } from '../hooks/useRecords'
+import { ChevronDown20Regular } from '@fluentui/react-icons';
+import { useStyles } from '../styles/Styles'
+
+
+
 export interface ILookupDropdownProps{
   entity: string;
 }
 
-// eslint-disable-next-line no-undef
 const LookupDropdown = ():JSX.Element => {
-  const dropdownRef = useRef<IDropdown>(null)
   const pcfcontext = usePcfContext()
-  // Custom Hook based on react-query
-  const { options, isLoading, isError } = useRecordsAsOptions()
+  const { options, status, isFetching} = useTagPickerOptions()
   const { entityname } = useLookupView()
+  const [query, setQuery] = useState<string>("");
+  const [selectedOption, setSelectedOption] = useState<
+    string | undefined
+  >(pcfcontext.selectedValue?.id ?? undefined);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isInputFocused, setInputFocused] = useState(false);
+  const styles = useStyles()
+
 
   // Clear the value if the selected value is not in the options
   // Only Used when a dependent lookup is changed
   useEffect(
     () => {
-      if (!isLoading &&
-          !isError &&
+      if (status === 'success' &&
            pcfcontext.dependentValue !== undefined && // Only clear if a dependent value is set
            options.length > 1 && // IMPORTANT There is always a blank option
            pcfcontext.selectedValue !== undefined &&
-           !options.some(option => option.key === pcfcontext.selectedValue?.id)) {
+           !options.some(option => option.id === pcfcontext.selectedValue?.id)) {
         pcfcontext.onChange(undefined)
       }
     }
-    , [options, isLoading, isError, pcfcontext.selectedValue])
+    , [options, status, pcfcontext.selectedValue])
 
-  const placeholder = pcfcontext.selectedValue === undefined || options.some(option => option.key === pcfcontext.selectedValue?.id) ? '---' : `--${pcfcontext.selectedValue?.name}--`
-
-  // EVENTS
-  // eslint-disable-next-line no-undef
-  const onRenderPlaceholder = (props: IDropdownProps|undefined): JSX.Element => {
-    return (
-      <div style={dropdownTextStyle}>
-          <em>{props?.placeholder}</em>
-      </div>
-    )
-  }
-
-  // - When value of combobox changes, callback to PCF
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onDropdownChanged = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption<any>|undefined, index? : number | undefined) => {
-    let lookupvalue
-    if (option === undefined || option.key === -1) {
-      lookupvalue = undefined
-    } else {
-      lookupvalue = [{
-        id: option.key.toString(),
-        name: option.data.recordname,
-        entityType: entityname
-      }]
+  // if lookup is changed outside of PCF
+  useEffect(
+    () => {
+      if (status === 'success' &&
+            pcfcontext.selectedValue?.id !== selectedOption) {
+        setSelectedOption(pcfcontext.selectedValue?.id)
+      }
     }
+    , [status, pcfcontext.selectedValue])
 
-    pcfcontext.onChange(lookupvalue)
-  }
+  // Signal back to Form 
+  useEffect(
+    () => {
+      if (status === 'success' && selectedOption === undefined) {
+        pcfcontext.onChange(undefined)
+      }else if(status === 'success' && selectedOption !== pcfcontext.selectedValue?.id){
+        pcfcontext.onChange([{id: selectedOption!, name: options.find((option) => option.id === selectedOption)?.primaryname, entityType: entityname}])
+      }
+    }
+    , [selectedOption])
 
-  // eslint-disable-next-line no-undef
-  const onRenderOption = (option: IDropdownOption | undefined): JSX.Element => {
-    return (
-      <div style={dropdownTextStyle}>
-        {pcfcontext.showRecordImage && option && option.data && (
-          <ImageIcon
-            style={dropdownIconOptionStyle}
-            imageProps={{
-              src: option.data.imagesrc,
-              width: 25,
-              height: 25
-            }}
-          />
-        )}
-        {option && option.text && (
-          <span>{option.text}</span>
-        )}
-      </div>
-    )
-  }
+  const placeholder = useMemo(
+    () => selectedOption === undefined ? '---' : '',
+    [selectedOption]
+  );
 
-  // eslint-disable-next-line no-undef
-  const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element => {
-    const option = options![0]
-    return (
-      <div id='titlediv' style={dropdownTitleStyles}>
-        {pcfcontext.showRecordImage && option && option.data && option.data.imagesrc && (
-          <ImageIcon
-            style={dropdownIcontitleStyle}
-            imageProps={{
-              src: option.data.imagesrc,
-              width: 25,
-              height: 25
-            }}
-          />
-        )}
-        {option && option.text && (
-          
-            <span style={dropdownTitleSpanStyles}>{option.text}</span>
-          
-        )}
-      </div>
-    )
-  }
+  const selectedOptions = useMemo(
+    () => (selectedOption ? [selectedOption] : []),
+    [selectedOption]
+  );
+
+
+  const handleBlur = () => {
+    setQuery('')
+    setInputFocused(false)
+  };
+
+
+
+  const handleOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    setInputFocused(e.target.value != ''); // if there is a value in the input, set to true (will hide the selected tag)
+    setQuery(e.target.value)    
+  };
+
+  const handleClear: React.MouseEventHandler = (event) => {
+    setSelectedOption(undefined)
+  };
+
+
+  const onOptionSelect: TagPickerProps["onOptionSelect"] = (e, data) => {
+    if (data.value === 'no-matches') {
+      setQuery('')
+      setInputFocused(false)
+      return;
+    }
+    //setSelectedOption(selectedOption === data.value ? undefined : data.value);
+    if(data.value === undefined || data.value === '-1'){
+      setSelectedOption(undefined)
+    }else if(data.value !== undefined && data.value !== pcfcontext.selectedValue?.id){
+      setSelectedOption(data.value)
+    }
+    setQuery('');
+    setInputFocused(false);
+  };
+
+  const children = useTagPickerFilter({
+    query,
+    options: options.map((option) => option.id),
+    noOptionsElement: (
+      <TagPickerOption value="no-matches">
+        {pcfcontext.context.resources.getString('**no match**') || '**no match**'}
+      </TagPickerOption>
+    ),
+    renderOption: (optionidToRender) => (
+      <TagPickerOption
+        className={optionidToRender === selectedOption ? styles.tagSelected : ''}
+        media={
+          options.find((option) => option.id === optionidToRender)?.imagesrc &&
+            <Image
+                alt={options.find((option) => option.id === optionidToRender)?.displaytext}
+                key={options.find((option) => option.id === optionidToRender)?.id}
+                shape="square"
+                src={options.find((option) => option.id === optionidToRender)?.imagesrc}
+                height={24}
+                //width={25}
+            />
+        }
+        text={options.find((option) => option.id === optionidToRender)?.displaytext ?? ''}
+        value={optionidToRender}
+        key={optionidToRender}
+      >
+         {options.find((option) => option.id === optionidToRender)?.displaytext}
+      </TagPickerOption>
+    ),
+
+    filter: (option) =>
+      (options.find((o) => o.id === option)?.displaytext.toLowerCase().includes(query.toLowerCase()) ?? false)
+  });
+
+  
 
   // MAIN RENDERING
-  if (isLoading) {
-    return <div>{pcfcontext.context.resources.getString("Loading...")}</div>
-  } if (isError) {
-    return <div>{pcfcontext.context.resources.getString("Error fetching data...")}</div>
+  if (status === 'pending' || isFetching) {
+    return <Spinner size='tiny' appearance='primary' label={pcfcontext.context.resources.getString('Loading...') || 'Loading...'} />
+  } if (status === 'error') {
+    return <div>{pcfcontext.context.resources.getString('Error fetching data...') || 'Error fetching data...'}</div>
   } else {
     return (
-      <>
+      <div className={styles.tagpicker}>
         {options && (
-          <Stack horizontal verticalAlign="center" wrap>
-            <Stack.Item grow={9} style={dropdownStackItemStyle}>
-              <Dropdown
+          <TagPicker
+            onOptionSelect={onOptionSelect}
+            selectedOptions={selectedOptions}
+            appearance={'filled-darker'}
+            disabled={pcfcontext.isReadOnly || pcfcontext.isMasked}
+          >
+            <TagPickerControl 
+              className={styles.tagPickerControl}
+              onMouseEnter={()=>{setIsFocused(true)}} 
+              onMouseLeave={()=>{setIsFocused(false)}}
+              expandIcon={<ChevronDown20Regular className={isFocused ? styles.elementVisible : styles.elementHidden}/>}
+              secondaryAction={
+                selectedOption && !pcfcontext.isReadOnly && !pcfcontext.isMasked  ?
+                 
+                    <Button
+                      className={mergeClasses(
+                        styles.clearButton, 
+                        isFocused ? styles.elementVisible : styles.elementHidden)
+                      }
+                      appearance="transparent"
+                      size="small"
+                      shape="rounded"
+                      onClick={handleClear}
+                    >
+                      {pcfcontext.context.resources.getString('Clear') || 'Clear'}
+                    </Button>
+                 :
+                 null 
+              }
+            >
+              {selectedOption && (
+                <TagPickerGroup 
+                  className={mergeClasses(
+                    styles.tagPickerGroup, 
+                    isInputFocused ? styles.tagPickerGroupHidden : styles.tagPickerGroupVisible)
+                  }>
+                  <Tag
+                    key={selectedOption}
+                    className={styles.tag}
+                    shape={'rounded'}
+                    size={'medium'}
+                    appearance={'outline'}
+                    media={
+                      options.find((option) => option.id === selectedOption)?.imagesrc &&
+                        <Image
+                            alt={options.find((option) => option.id === selectedOption)?.displaytext}
+                            key={options.find((option) => option.id === selectedOption)?.id}
+                            shape="square"
+                            src={options.find((option) => option.id === selectedOption)?.imagesrc}
+                            height={24}
+                        />
+                    
+                    }
+                    value={selectedOption}
+                    title={options.find((option) => option.id === selectedOption)?.displaytext}
+                    dismissible = {false}
+                    primaryText={{className: styles.tagOverflow }}
+                  >
+                    {pcfcontext.openRecordEnabled ? 
+                      <Link className={styles.tagOverflowLink}
+                        onClick={() => pcfcontext.openRecord(entityname)}>
+                          {options.find((option) => option.id === selectedOption)?.displaytext}
+                      </Link>
+                      :
+                      options.find((option) => option.id === selectedOption)?.displaytext
+                    }
+                    {}
+                  </Tag>
+                </TagPickerGroup>
+              )}
+    
+              <TagPickerInput 
+                className={styles.tagPickerInput}
+                aria-label={pcfcontext.SelectText()}
                 placeholder={placeholder}
-                componentRef={dropdownRef}
-                onRenderPlaceholder={onRenderPlaceholder}
-                onRenderTitle={onRenderTitle}
-                onRenderOption={onRenderOption}
-                onChange={onDropdownChanged}
-                selectedKey={pcfcontext.selectedValue?.id ?? ''}
-                options={options}
-                styles = {dropdownStyles}
-                theme = {dropdownTheme}
-                disabled={pcfcontext.isReadOnly}
+                value={query}
+                onChange={handleOnChange} 
+                onBlur={handleBlur}
+                clearable={true}
               />
-            </Stack.Item>
-            {pcfcontext.context.parameters.showOpenRecordButton.raw === 'true' && (
-              <Stack.Item grow>
-                <OpenRecordButton/>
-              </Stack.Item>
-            )}
-          </Stack>
+            </TagPickerControl>
+            <TagPickerList>
+              {children}
+            </TagPickerList>
+          </TagPicker>
         )}
-      </>
+      </div>
     )
   }
 }
