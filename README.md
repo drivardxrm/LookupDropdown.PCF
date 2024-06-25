@@ -43,8 +43,7 @@
 # Dependencies
 FluentUI V9: [https://github.com/microsoft/fluentui](https://react.fluentui.dev/?path=/docs/concepts-introduction--page)
 
-tanstack-query : [https://react-query.tanstack.com/
-](https://tanstack.com/query/latest)
+tanstack-query : [https://react-query.tanstack.com/](https://tanstack.com/query/latest)
 
 # Parameters
 | Parameter         | Description                                                                                  | Default     |
@@ -59,7 +58,8 @@ tanstack-query : [https://react-query.tanstack.com/
 
 # Screenshots
 
-![lookupdropdown](https://user-images.githubusercontent.com/38399134/147582453-e507d7ab-d83d-476e-96af-d48a85d495c1.gif)
+![Recording_Screenshot](https://github.com/drivardxrm/LookupDropdown.PCF/assets/38399134/e2aecc6a-94a3-4c4f-9cb2-0cac9002be9c)
+
 
 
 # Installation
