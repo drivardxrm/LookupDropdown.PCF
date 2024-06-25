@@ -5,7 +5,7 @@
  
 **IMPORTANT : The control needs to be configured using the Classic UI see issue [#29](https://github.com/drivardxrm/LookupDropdown.PCF/issues/29) for more info**
 
-**UPDATE 2022-01-20 : PLEASE USE v1.0.0.2 or above, a 🐛 was found in earlier versions**
+**IMPORTANT** : since v2.0.0.0 the control as been refactored to use FluentUI v9 to blend with Model-driven apps [new Look](https://learn.microsoft.com/en-us/power-apps/user/modern-fluent-design?WT.mc_id=DX-MVP-5004959) 
 
  
 **Blog posts :** 
@@ -29,20 +29,21 @@
 
 ![image](https://user-images.githubusercontent.com/38399134/147574893-f2f5b658-6400-4e58-a854-7160428fe8dd.png)
 
+![image](https://github.com/drivardxrm/LookupDropdown.PCF/assets/38399134/23f19a2d-5b04-4ea9-be41-01937e87e7f7)
 
-![image](https://user-images.githubusercontent.com/38399134/147574921-388d1e41-3873-4a03-aa8d-9e64a103621f.png)
 
 * Support for Related Record Filtering (cascading)
 
+![LookupDropdownFiltering2](https://github.com/drivardxrm/LookupDropdown.PCF/assets/38399134/4294c1be-5412-455a-876b-803e95a48b05)
 
-![lookupdropdown-dependant2](https://user-images.githubusercontent.com/38399134/153111779-cceb0486-65f3-45b8-a12a-6bc5414b9d21.gif)
+
 
 
 
 # Dependencies
-FluentUI : https://github.com/microsoft/fluentui
+FluentUI V9: [https://github.com/microsoft/fluentui](https://react.fluentui.dev/?path=/docs/concepts-introduction--page)
 
-react-query : https://react-query.tanstack.com/
+tanstack-query : [https://react-query.tanstack.com/](https://tanstack.com/query/latest)
 
 # Parameters
 | Parameter         | Description                                                                                  | Default     |
@@ -57,7 +58,8 @@ react-query : https://react-query.tanstack.com/
 
 # Screenshots
 
-![lookupdropdown](https://user-images.githubusercontent.com/38399134/147582453-e507d7ab-d83d-476e-96af-d48a85d495c1.gif)
+![Recording_Screenshot](https://github.com/drivardxrm/LookupDropdown.PCF/assets/38399134/e2aecc6a-94a3-4c4f-9cb2-0cac9002be9c)
+
 
 
 # Installation
