@@ -70,4 +70,7 @@
   <data name="Clear" xml:space="preserve">
     <value>Effacer</value> 
   </data>
+  <data name="**no match**" xml:space="preserve">
+    <value>**aucune concordance**</value> 
+  </data>
 </root>

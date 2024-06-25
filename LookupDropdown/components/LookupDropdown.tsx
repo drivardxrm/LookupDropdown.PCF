@@ -110,7 +110,7 @@ const LookupDropdown = ():JSX.Element => {
     options: options.map((option) => option.id),
     noOptionsElement: (
       <TagPickerOption value="no-matches">
-        **no match**
+        {pcfcontext.context.resources.getString('**no match**') || '**no match**'}
       </TagPickerOption>
     ),
     renderOption: (optionidToRender) => (
