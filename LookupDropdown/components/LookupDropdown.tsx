@@ -115,10 +115,14 @@ const LookupDropdown = ():JSX.Element => {
     ),
     renderOption: (optionidToRender) => (
       <TagPickerOption
-        className={optionidToRender === selectedOption ? styles.tagSelected : ''}
+        className={mergeClasses(
+          styles.tagPickerOption, 
+          optionidToRender === selectedOption ? styles.tagSelected : '')
+        }
         media={
           options.find((option) => option.id === optionidToRender)?.imagesrc &&
             <Image
+                className={styles.tagPickerOption}
                 alt={options.find((option) => option.id === optionidToRender)?.displaytext}
                 key={options.find((option) => option.id === optionidToRender)?.id}
                 shape="square"

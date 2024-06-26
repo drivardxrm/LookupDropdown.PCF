@@ -20,6 +20,10 @@ export const useStyles = makeStyles({
   tagPickerInput: {
    padding: '0 0 0 0'
   },
+  tagPickerOption : {
+    display: 'flex',
+    alignItems: 'center' /* This centers the content vertically */
+  },
   clearButton: {
     paddingLeft: '0',
     paddingRight: '0',

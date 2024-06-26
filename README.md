@@ -49,7 +49,7 @@ tanstack-query : [https://react-query.tanstack.com/](https://tanstack.com/query/
 | Parameter         | Description                                                                                  | Default     |
 |-------------------|----------------------------------------------------------------------------------------------|----------   |
 | lookupfield  | REQUIRED: Bound Lookup field to render as dropdown                             |             |
-| customtext  | OPTIONAL: Customize display text with any text attributes of the record. put attribute schema names between brackets {}. Ex. {new_firstname} {new_lastname}. Leave blank to show record primaryname. Support multiple language using the format LANGUAGECODE1##{attrib1lang1} {attrib2lang1}__LANGUAGECODE2##{attrib1lang2} {attrib1lang2} ex: 1033##{new_nameen}__1036##{new_namefr} |             |
+| customtext  | OPTIONAL: Customize display text with any text attributes of the record. put attribute schema names between brackets {}. Ex. {new_firstname} {new_lastname}. Leave blank to show record primaryname. Support multiple language using the format LANGUAGECODE1##{attrib1lang1} {attrib2lang1}__LANGUAGECODE2##{attrib1lang2} {attrib2lang2} ex: 1033##{new_nameen}__1036##{new_namefr} |             |
 | customselecttext    | OPTIONAL: Custom text for dropdown selector text (default = Select)    | |
 | dependentlookupfield | OPTIONAL: Dependent Lookup field. Use when Related Records Filtering is set on the Field Properties    | |
 | showRecordImage   | Show the record image beside the text | false  |
