@@ -4,7 +4,7 @@ import { usePcfContext } from '../services/PcfContext'
 import { useLookupView } from '../hooks/useLookupView'
 import { Button, Image, Link, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, mergeClasses, useTagPickerFilter } from '@fluentui/react-components'
 import { useTagPickerOptions } from '../hooks/useRecords'
-import { ChevronDown20Regular } from '@fluentui/react-icons';
+import { ChevronDown20Regular, DismissRegular } from '@fluentui/react-icons';
 import { useStyles } from '../styles/Styles'
 
 
@@ -177,8 +177,9 @@ const LookupDropdown = ():JSX.Element => {
                       size="small"
                       shape="rounded"
                       onClick={handleClear}
+                      icon={<DismissRegular/>}
                     >
-                      {pcfcontext.context.resources.getString('Clear') || 'Clear'}
+                     
                     </Button>
                  :
                  null 
