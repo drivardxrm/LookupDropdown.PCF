@@ -8,7 +8,7 @@ import {
   
   import { LookupDropdown as Component } from "../LookupDropdown/index";
   import { IInputs, IOutputs } from "../LookupDropdown/generated/ManifestTypes";
-  import { useArgs } from "@storybook/client-api";
+  import { useArgs } from "@storybook/preview-api";
   import { ImgBetim, ImgDavid } from "./mock/EntityImages";
 
 export interface StoryArgs {

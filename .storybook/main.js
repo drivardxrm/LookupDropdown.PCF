@@ -10,18 +10,12 @@ module.exports = {
     config.devtool = false;
     config.resolve.fallback = config.resolve.fallback || {};
     config.resolve.fallback.fs = false;
-    config.module.rules.forEach(rule => {
-      if ("a.tsx".match(rule.test)) {
-        //console.log(rule.use);
-        rule.use = [{
-          loader: 'esbuild-loader',
-          options: {
-            loader: 'tsx',
-            // Or 'ts' if you don't need tsx
-            target: 'es2015'
-          }
-        }];
-      }
+    
+    config.module.rules.push({
+      test: /\.(ts|tsx|js|jsx)$/,
+      loader: require.resolve("esbuild-loader"),
+      options: {
+      },
     });
     config.plugins.push(new webpack.SourceMapDevToolPlugin({
       append: '\n//# sourceMappingURL=[url]',
@@ -31,6 +25,6 @@ module.exports = {
     return config;
   },
   features: {
-    storyStoreV7: true
+    // storyStoreV7: true
   }
 };
