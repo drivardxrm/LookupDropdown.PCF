@@ -7,6 +7,10 @@
 
 **IMPORTANT** : since v2.0.0.0 the control as been refactored to use FluentUI v9 to blend with Model-driven apps [new Look](https://learn.microsoft.com/en-us/power-apps/user/modern-fluent-design?WT.mc_id=DX-MVP-5004959) 
 
+![image](https://github.com/drivardxrm/LookupDropdown.PCF/assets/38399134/a5377ed4-66be-4594-88c0-59e65258a8d0)
+
+
+
  
 **Blog posts :** 
  * https://itmustbecode.com/better-ux-with-a-lookup-dropdown-pcf-control/
@@ -29,7 +33,7 @@
 
 ![image](https://user-images.githubusercontent.com/38399134/147574893-f2f5b658-6400-4e58-a854-7160428fe8dd.png)
 
-![image](https://github.com/drivardxrm/LookupDropdown.PCF/assets/38399134/23f19a2d-5b04-4ea9-be41-01937e87e7f7)
+![image](https://github.com/drivardxrm/LookupDropdown.PCF/assets/38399134/76f9d204-96a2-4fab-9848-1b8cda2a795f)
 
 
 * Support for Related Record Filtering (cascading)
