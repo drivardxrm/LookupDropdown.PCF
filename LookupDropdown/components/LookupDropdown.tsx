@@ -161,7 +161,10 @@ const LookupDropdown = ():JSX.Element => {
             disabled={pcfcontext.isReadOnly || pcfcontext.isMasked}
           >
             <TagPickerControl 
-              className={styles.tagPickerControl}
+              className={mergeClasses(
+                styles.tagPickerControl, 
+                !selectedOption ? styles.tagPickerControlEmpty : '')
+              }
               onMouseEnter={()=>{setIsFocused(true)}} 
               onMouseLeave={()=>{setIsFocused(false)}}
               expandIcon={<ChevronDown20Regular className={isFocused ? styles.elementVisible : styles.elementHidden}/>}

@@ -141,7 +141,7 @@ export class PcfContextService {
 
     if (result.entities)
     {
-      if (this.context.parameters.sortByTextValue.raw === 'true')
+      if (this.context.parameters.sortByTextValue?.raw === 'true')
       {
         return result.entities?.sort((a, b) => {
           const aText = this.getRecordText(a, primaryname);

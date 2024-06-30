@@ -7,6 +7,9 @@ export const useStyles = makeStyles({
     paddingLeft: '3px',
     height: '32px'
   },
+  tagPickerControlEmpty: {
+    paddingLeft: '10px',
+  },
   tagPickerGroup: {
     padding: '0 0 0 0',
   },
