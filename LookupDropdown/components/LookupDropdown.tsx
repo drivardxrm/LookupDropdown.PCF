@@ -13,7 +13,7 @@ export interface ILookupDropdownProps{
   entity: string;
 }
 
-const LookupDropdown = ():JSX.Element => {
+const LookupDropdown = ():React.JSX.Element => {
   const pcfcontext = usePcfContext()
   const { options, status, isFetching} = useTagPickerOptions()
   const { entityname } = useLookupView()

@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PcfContextProvider } from '../services/PcfContext'
 import { IPcfContextServiceProps, PcfContextService } from '../services/PcfContextService'
@@ -18,7 +19,7 @@ const queryClient = new QueryClient({
 })
 
 // eslint-disable-next-line no-undef
-const LookupDropdownApp = (props:IPcfContextServiceProps): JSX.Element => {
+const LookupDropdownApp = (props:IPcfContextServiceProps): React.JSX.Element => {
   const pcfcontextservice = new PcfContextService(props)
 
   return (
