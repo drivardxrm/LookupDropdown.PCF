@@ -13,7 +13,7 @@ export interface ILookupDropdownProps{
   entity: string;
 }
 
-const LookupDropdown = ():JSX.Element => {
+const LookupDropdown = ():React.JSX.Element => {
   const pcfcontext = usePcfContext()
   const { options, status, isFetching} = useTagPickerOptions()
   const { entityname } = useLookupView()
@@ -24,6 +24,7 @@ const LookupDropdown = ():JSX.Element => {
   const [isFocused, setIsFocused] = useState(false);
   const [isInputFocused, setInputFocused] = useState(false);
   const styles = useStyles()
+  const [isDisabled, setIsDisabled] = useState(pcfcontext.isReadOnly || pcfcontext.isMasked)
 
 
   // Clear the value if the selected value is not in the options
@@ -49,6 +50,13 @@ const LookupDropdown = ():JSX.Element => {
       }
     }
     , [status, pcfcontext.selectedValue])
+
+  // if readonly or masked is changed outside of PCF
+  useEffect(
+    () => {
+      setIsDisabled(pcfcontext.isReadOnly || pcfcontext.isMasked)
+    }
+    , [pcfcontext.isReadOnly, pcfcontext.isMasked])
 
   // Signal back to Form 
   useEffect(
@@ -158,12 +166,13 @@ const LookupDropdown = ():JSX.Element => {
             onOptionSelect={onOptionSelect}
             selectedOptions={selectedOptions}
             appearance={'filled-darker'}
-            disabled={pcfcontext.isReadOnly || pcfcontext.isMasked}
+            disabled={isDisabled}
           >
             <TagPickerControl 
               className={mergeClasses(
                 styles.tagPickerControl, 
-                !selectedOption ? styles.tagPickerControlEmpty : '')
+                !selectedOption ? styles.tagPickerControlEmpty : '',
+                isDisabled ? styles.tagPickerControlDisabled : '')
               }
               onMouseEnter={()=>{setIsFocused(true)}} 
               onMouseLeave={()=>{setIsFocused(false)}}
@@ -196,7 +205,10 @@ const LookupDropdown = ():JSX.Element => {
                   }>
                   <Tag
                     key={selectedOption}
-                    className={styles.tag}
+                    className={mergeClasses(
+                      styles.tag,
+                      isDisabled ? styles.tagDisabled : '',
+                    )}
                     shape={'rounded'}
                     size={'medium'}
                     appearance={'outline'}
@@ -215,6 +227,7 @@ const LookupDropdown = ():JSX.Element => {
                     title={options.find((option) => option.id === selectedOption)?.displaytext}
                     dismissible = {false}
                     primaryText={{className: styles.tagOverflow }}
+                    color='brand'
                   >
                     {pcfcontext.openRecordEnabled ? 
                       <Link className={styles.tagOverflowLink}
