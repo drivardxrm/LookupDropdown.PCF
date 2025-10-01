@@ -7,6 +7,15 @@ export const useStyles = makeStyles({
     paddingLeft: '3px',
     height: '32px'
   },
+  tagPickerControlDisabled: {
+    backgroundColor: tokens.colorNeutralBackground3,
+    color: tokens.colorNeutralForeground1,
+    border: 'none'
+  },
+  tagDisabled: {
+    opacity: 1,
+    color: tokens.colorNeutralForeground1
+  },
   tagPickerControlEmpty: {
     paddingLeft: '10px',
   },
