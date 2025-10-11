@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, Activity } from 'react'
 import { usePcfContext } from '../services/PcfContext'
 import { useLookupView } from '../hooks/useLookupView'
 import { Button, Image, Link, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, mergeClasses, useTagPickerFilter } from '@fluentui/react-components'
 import { useTagPickerOptions } from '../hooks/useRecords'
 import { ChevronDown20Regular, DismissRegular } from '@fluentui/react-icons';
 import { useStyles } from '../styles/Styles'
+
 
 
 
@@ -27,7 +28,8 @@ const LookupDropdown = ():React.JSX.Element => {
   const [isDisabled, setIsDisabled] = useState(pcfcontext.isReadOnly || pcfcontext.isMasked)
 
 
-  // Clear the value if the selected value is not in the options
+  
+   // Clear the value if the selected value is not in the options
   // Only Used when a dependent lookup is changed
   useEffect(
     () => {
@@ -161,7 +163,7 @@ const LookupDropdown = ():React.JSX.Element => {
   } else {
     return (
       <div className={styles.tagpicker}>
-        {options && (
+        <Activity mode={options  ? 'visible' : 'hidden'}>
           <TagPicker
             onOptionSelect={onOptionSelect}
             selectedOptions={selectedOptions}
@@ -256,7 +258,7 @@ const LookupDropdown = ():React.JSX.Element => {
               {children}
             </TagPickerList>
           </TagPicker>
-        )}
+        </Activity>
       </div>
     )
   }
