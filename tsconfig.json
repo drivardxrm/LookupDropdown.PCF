@@ -7,5 +7,10 @@
         "moduleResolution": "node",
         "jsx": "react-jsx",
         "allowSyntheticDefaultImports": true
-    }
+    },
+    // Storybook-only files (stories/, .storybook/) are never part of the PCF control
+    // bundle and use Storybook 10 packages that are exports-map-only, which this
+    // project's TypeScript version can't resolve under "moduleResolution": "node".
+    // They're type-checked separately by Storybook's own Vite/esbuild build instead.
+    "exclude": ["node_modules", "stories", ".storybook"]
 }
