@@ -15,3 +15,6 @@
 .vscode/settings.json
 
 /storybook-static
+
+# teaching workspace (/teach skill)
+/.teach
