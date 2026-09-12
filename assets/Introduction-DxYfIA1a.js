@@ -1,4 +1,4 @@
-import{j as e}from"./index-66Y5VBdu.js";import{u as t,M as o}from"./blocks-BLwNjCpk.js";import"./preload-helper-C1FmrZbK.js";import"./iframe-VLHW0-V7.js";function r(i){const n={h1:"h1",p:"p",...t(),...i.components};return e.jsxs(e.Fragment,{children:[e.jsx(o,{title:"Introduction"}),`
+import{j as e}from"./index-BB7bGUWr.js";import{u as t,M as o}from"./blocks-sdpWRLdd.js";import"./preload-helper-Dp1pzeXC.js";import"./iframe-Cw8jSjCh.js";function r(i){const n={h1:"h1",p:"p",...t(),...i.components};return e.jsxs(e.Fragment,{children:[e.jsx(o,{title:"Introduction"}),`
 `,e.jsx("style",{children:`
   .subheading {
     --mediumdark: '#999999';
@@ -110,4 +110,4 @@ View their code in the `,e.jsx("code",{children:"stories"})," directory to learn
 LookupDropdown.PCF`]})})]}),e.jsxs("a",{className:"link-item",href:"https://pcf.gallery/lookup-dropdown-pcf/",target:"_blank",children:[e.jsx("img",{src:"https://pcf.gallery/assets/images/logo.png",alt:"PCF Gallery"}),e.jsx("span",{children:e.jsxs(n.p,{children:[e.jsx("strong",{children:"PCF Gallery"}),`
 LookupDropdown PCF`]})})]}),e.jsxs("a",{className:"link-item",href:"https://github.com/Shko-Online/ComponentFramework-Mock",target:"_blank",children:[e.jsx("img",{src:"https://avatars.githubusercontent.com/u/103819795?s=200&v=4",alt:"Shko Online"}),e.jsx("span",{children:e.jsxs(n.p,{children:[e.jsx("strong",{children:"Shko Online"}),`
 ComponentFramework Mock`]})})]})]})]})}function d(i={}){const{wrapper:n}={...t(),...i.components};return n?e.jsx(n,{...i,children:e.jsx(r,{...i})}):r(i)}export{d as default};
-//# sourceMappingURL=Introduction-1TOQm2HC.js.map
+//# sourceMappingURL=Introduction-DxYfIA1a.js.map
