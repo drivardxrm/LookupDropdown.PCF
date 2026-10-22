@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect, useState, useMemo, useRef, Activity } from 'react'
+import { useEffect, useState, useMemo, Activity } from 'react'
 import { usePcfContext } from '../services/PcfContext'
 import { useLookupView } from '../hooks/useLookupView'
 import { Button, Image, Link, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, mergeClasses, useTagPickerFilter } from '@fluentui/react-components'
@@ -26,32 +26,6 @@ const LookupDropdown = ():React.JSX.Element => {
   const [isInputFocused, setInputFocused] = useState(false);
   const styles = useStyles()
   const [isDisabled, setIsDisabled] = useState(pcfcontext.isReadOnly || pcfcontext.isMasked)
-  const previousDependentValueId = useRef(pcfcontext.dependentValue?.id)
-  const dependentValueChangePending = useRef(false)
-  const dependentLookupChanged = pcfcontext.context.updatedProperties.includes('dependentlookupfield')
-
-
-  
-   // Clear the value if the selected value is not in the options
-  useEffect(
-    () => {
-      const dependentValueId = pcfcontext.dependentValue?.id
-      if (dependentLookupChanged && previousDependentValueId.current !== dependentValueId) {
-        dependentValueChangePending.current = true
-        previousDependentValueId.current = dependentValueId
-      }
-
-      if (!dependentValueChangePending.current || status !== 'success' || isFetching) {
-        return
-      }
-
-      if (pcfcontext.selectedValue !== undefined &&
-          !options.some(option => option.id === pcfcontext.selectedValue?.id)) {
-        pcfcontext.onChange(undefined)
-      }
-      dependentValueChangePending.current = false
-    }
-    , [options, status, isFetching, pcfcontext.selectedValue, dependentLookupChanged])
 
   // if lookup is changed outside of PCF
   useEffect(
@@ -96,9 +70,13 @@ const LookupDropdown = ():React.JSX.Element => {
     setQuery(e.target.value)    
   };
 
-  const handleClear: React.MouseEventHandler = (event) => {
+  const clearSelection = () => {
     setSelectedOption(undefined)
     pcfcontext.onChange(undefined)
+  };
+
+  const handleClear: React.MouseEventHandler = () => {
+    clearSelection()
   };
 
 
@@ -109,8 +87,7 @@ const LookupDropdown = ():React.JSX.Element => {
       return;
     }
     if(data.value === undefined || data.value === '-1'){
-      setSelectedOption(undefined)
-      pcfcontext.onChange(undefined)
+      clearSelection()
     }else if(data.value !== undefined && data.value !== pcfcontext.selectedValue?.id){
       setSelectedOption(data.value)
       const selectedRecord = options.find((option) => option.id === data.value)
