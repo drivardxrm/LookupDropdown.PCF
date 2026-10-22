@@ -59,6 +59,9 @@ export const useStyles = makeStyles({
   tag: {
     border: 'none'
   },
+  tagFallback: {
+    fontStyle: 'italic'
+  },
   tagOverflow: {
     whiteSpace: 'nowrap', /* Prevents the text from wrapping to the next line */
     overflow: 'hidden', /* Hides the overflow text */

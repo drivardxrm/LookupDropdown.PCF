@@ -70,21 +70,13 @@ const LookupDropdown = ():React.JSX.Element => {
     }
     , [pcfcontext.isReadOnly, pcfcontext.isMasked])
 
-  // Signal back to Form 
-  useEffect(
-    () => {
-      if (status === 'success' && selectedOption === undefined) {
-        pcfcontext.onChange(undefined)
-      }else if(status === 'success' && selectedOption !== pcfcontext.selectedValue?.id){
-        pcfcontext.onChange([{id: selectedOption!, name: options.find((option) => option.id === selectedOption)?.primaryname, entityType: entityname}])
-      }
-    }
-    , [selectedOption])
-
   const placeholder = useMemo(
     () => selectedOption === undefined ? '---' : '',
     [selectedOption]
   );
+
+  const selectedRecord = options.find((option) => option.id === selectedOption)
+  const selectedText = selectedRecord?.displaytext ?? pcfcontext.selectedValue?.name
 
   const selectedOptions = useMemo(
     () => (selectedOption ? [selectedOption] : []),
@@ -106,6 +98,7 @@ const LookupDropdown = ():React.JSX.Element => {
 
   const handleClear: React.MouseEventHandler = (event) => {
     setSelectedOption(undefined)
+    pcfcontext.onChange(undefined)
   };
 
 
@@ -115,11 +108,17 @@ const LookupDropdown = ():React.JSX.Element => {
       setInputFocused(false)
       return;
     }
-    //setSelectedOption(selectedOption === data.value ? undefined : data.value);
     if(data.value === undefined || data.value === '-1'){
       setSelectedOption(undefined)
+      pcfcontext.onChange(undefined)
     }else if(data.value !== undefined && data.value !== pcfcontext.selectedValue?.id){
       setSelectedOption(data.value)
+      const selectedRecord = options.find((option) => option.id === data.value)
+      pcfcontext.onChange([{
+        id: data.value,
+        name: selectedRecord?.primaryname,
+        entityType: entityname
+      }])
     }
     setQuery('');
     setInputFocused(false);
@@ -236,7 +235,7 @@ const LookupDropdown = ():React.JSX.Element => {
                     
                     }
                     value={selectedOption}
-                    title={options.find((option) => option.id === selectedOption)?.displaytext}
+                    title={selectedText}
                     dismissible = {false}
                     primaryText={{className: styles.tagOverflow }}
                     color='brand'
@@ -244,12 +243,11 @@ const LookupDropdown = ():React.JSX.Element => {
                     {pcfcontext.openRecordEnabled ? 
                       <Link className={styles.tagOverflowLink}
                         onClick={() => pcfcontext.openRecord(entityname)}>
-                          {options.find((option) => option.id === selectedOption)?.displaytext}
+                          <span className={!selectedRecord ? styles.tagFallback : undefined}>{selectedText}</span>
                       </Link>
                       :
-                      options.find((option) => option.id === selectedOption)?.displaytext
+                      <span className={!selectedRecord ? styles.tagFallback : undefined}>{selectedText}</span>
                     }
-                    {}
                   </Tag>
                 </TagPickerGroup>
               )}
