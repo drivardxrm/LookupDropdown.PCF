@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect, useState, useMemo, Activity } from 'react'
+import { useEffect, useState, useMemo, useRef, useCallback, Activity } from 'react'
 import { usePcfContext } from '../services/PcfContext'
 import { useLookupView } from '../hooks/useLookupView'
 import { Button, Image, Link, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, mergeClasses, useTagPickerFilter } from '@fluentui/react-components'
@@ -22,6 +22,8 @@ const LookupDropdown = ():React.JSX.Element => {
   const [selectedOption, setSelectedOption] = useState<
     string | undefined
   >(pcfcontext.selectedValue?.id ?? undefined);
+  const previousDependentValueId = useRef(pcfcontext.dependentValue?.id)
+  const dependentLookupWasUpdated = pcfcontext.context.updatedProperties.includes('dependentlookupfield')
   const [isFocused, setIsFocused] = useState(false);
   const [isInputFocused, setInputFocused] = useState(false);
   const styles = useStyles()
@@ -57,6 +59,28 @@ const LookupDropdown = ():React.JSX.Element => {
     [selectedOption]
   );
 
+  const clearSelection = useCallback(() => {
+    setSelectedOption(undefined)
+    pcfcontext.onChange(undefined)
+  }, [pcfcontext.onChange])
+
+  useEffect(
+    () => {
+      const dependentValueId = pcfcontext.dependentValue?.id
+      const dependentLookupWasCleared =
+        dependentLookupWasUpdated &&
+        previousDependentValueId.current !== undefined &&
+        dependentValueId === undefined
+
+      previousDependentValueId.current = dependentValueId
+
+      if (dependentLookupWasCleared && pcfcontext.selectedValue !== undefined) {
+        clearSelection()
+      }
+    },
+    [dependentLookupWasUpdated, pcfcontext.dependentValue?.id, pcfcontext.selectedValue?.id, clearSelection]
+  )
+
 
   const handleBlur = () => {
     setQuery('')
@@ -68,11 +92,6 @@ const LookupDropdown = ():React.JSX.Element => {
   const handleOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setInputFocused(e.target.value != ''); // if there is a value in the input, set to true (will hide the selected tag)
     setQuery(e.target.value)    
-  };
-
-  const clearSelection = () => {
-    setSelectedOption(undefined)
-    pcfcontext.onChange(undefined)
   };
 
   const handleClear: React.MouseEventHandler = () => {
