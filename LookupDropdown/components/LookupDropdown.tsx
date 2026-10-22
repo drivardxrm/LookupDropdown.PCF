@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect, useState, useMemo, Activity } from 'react'
+import { useEffect, useState, useMemo, useRef, Activity } from 'react'
 import { usePcfContext } from '../services/PcfContext'
 import { useLookupView } from '../hooks/useLookupView'
 import { Button, Image, Link, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, mergeClasses, useTagPickerFilter } from '@fluentui/react-components'
@@ -26,22 +26,32 @@ const LookupDropdown = ():React.JSX.Element => {
   const [isInputFocused, setInputFocused] = useState(false);
   const styles = useStyles()
   const [isDisabled, setIsDisabled] = useState(pcfcontext.isReadOnly || pcfcontext.isMasked)
+  const previousDependentValueId = useRef(pcfcontext.dependentValue?.id)
+  const dependentValueChangePending = useRef(false)
+  const dependentLookupChanged = pcfcontext.context.updatedProperties.includes('dependentlookupfield')
 
 
   
    // Clear the value if the selected value is not in the options
-  // Only Used when a dependent lookup is changed
   useEffect(
     () => {
-      if (status === 'success' &&
-           pcfcontext.dependentValue !== undefined && // Only clear if a dependent value is set
-           options.length > 1 && // IMPORTANT There is always a blank option
-           pcfcontext.selectedValue !== undefined &&
-           !options.some(option => option.id === pcfcontext.selectedValue?.id)) {
+      const dependentValueId = pcfcontext.dependentValue?.id
+      if (dependentLookupChanged && previousDependentValueId.current !== dependentValueId) {
+        dependentValueChangePending.current = true
+        previousDependentValueId.current = dependentValueId
+      }
+
+      if (!dependentValueChangePending.current || status !== 'success' || isFetching) {
+        return
+      }
+
+      if (pcfcontext.selectedValue !== undefined &&
+          !options.some(option => option.id === pcfcontext.selectedValue?.id)) {
         pcfcontext.onChange(undefined)
       }
+      dependentValueChangePending.current = false
     }
-    , [options, status, pcfcontext.selectedValue])
+    , [options, status, isFetching, pcfcontext.selectedValue, dependentLookupChanged])
 
   // if lookup is changed outside of PCF
   useEffect(
